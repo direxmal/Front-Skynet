@@ -1,77 +1,37 @@
 <template>
   <v-app inspire>
     <v-navigation-drawer
-      clipped
-      v-model="drawer"
-      fixed
-      app
-    >
-      <v-list dense
-        router
-         :to="item.to"
-         :key="i"
-         v-for="(item, i) in items"
-         exact >
-        <v-card-media src="https://image.ibb.co/jOFjrJ/inacap.png" height="150px"> <!-- la imagen de la navbar-->
-        </v-card-media>
-        <template v-for="item in items">
-          <v-layout
-            v-if="item.heading"
-            :key="item.heading"
-            row
-            align-center
-          >
-            <v-flex xs6>
-              <v-subheader v-if="item.heading"> <!--Carga todo lo de las listas -->
-                {{ item.heading }}
-              </v-subheader>
-            </v-flex>
-            <v-flex xs6 class="text-xs-center">
-              <a href="#!" class="body-2 black--text">EDIT</a>
-            </v-flex>
-          </v-layout>
-          <v-list-group
-            v-else-if="item.children"
-            v-model="item.model"
-            :key="item.text"
-            :prepend-icon="item.model ? item.icon : item['icon-alt']"
-            append-icon=""
-          >
-            <v-list-tile slot="activator">
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  {{ item.text }}
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile
-              v-for="(child, i) in item.children"
-              :key="i"
-              @click=""
+        fixed
+        clipped
+        app
+        v-model="drawer"
+      >
+       <v-card-media src="https://image.ibb.co/jOFjrJ/inacap.png"  height="150px">
+       </v-card-media>
+         <v-list>
+            <v-list-group
+              v-model="item.active"
+              v-for="item in items"
+              :key="item.title"
+              :prepend-icon="item.action"
+              no-action
             >
-              <v-list-tile-action v-if="child.icon">
-                <v-icon>{{ child.icon }}</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  {{ child.text }}
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list-group>
-          <v-list-tile v-else :key="item.text" @click="">
-            <v-list-tile-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>
-                {{ item.text }}
-              </v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </template>
-      </v-list>
-    </v-navigation-drawer>
+              <v-list-tile slot="activator">
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-list-tile :to="subItem.to" v-for="subItem in item.items" :key="subItem.title" @click="prueba" >
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+                </v-list-tile-content>
+                <v-list-tile-action>
+                  <v-icon>{{ subItem.action }}</v-icon>
+                </v-list-tile-action>
+              </v-list-tile>
+            </v-list-group>
+          </v-list>
+      </v-navigation-drawer>
 
     <!--aqui empieza la toolbar -->
     <v-toolbar
@@ -87,18 +47,29 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-tooltip bottom>
-         <v-btn slot="activator" icon dark><v-icon>home</v-icon></v-btn> <!-- Este va al inicio-->
+         <v-btn slot="activator" @click="sumarUno" icon dark><v-icon>home</v-icon></v-btn> <!-- Este va al inicio-->
         <span>Inicio</span>
       </v-tooltip>
       <v-menu offset-y>
         <v-btn slot="activator" icon dark>
           <v-icon>more_vert</v-icon>
         </v-btn>
-      <v-list>
-        <v-list-tile v-for="(item, index) in item" :key="index" @click=""> <!-- modal que se despliega el modal-->
-          <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
+        <!-- La lista de la toolbar-->
+        <v-list>
+           <v-list-group
+             v-model="item.active"
+             v-for="item in item"
+             :key="item.title"
+
+           >
+             <v-list-tile slot="activator">
+               <v-list-tile-content>
+                 <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+               </v-list-tile-content>
+             </v-list-tile>
+           </v-list-group>
+         </v-list>
+
     </v-menu>
     </v-toolbar>
     <v-content>
@@ -112,32 +83,46 @@
 
 <script>
   export default {
-    data: () => ({
-      dialog: false,
-      drawer: null,
-      items: [
-
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: 'Gestión de Salas',
-          model: false,
-          children: [
-
-            { text: 'Primer Piso', to: '/primerPiso' },
-            { text: 'Segundo Piso' },
-            { text: 'Tercer Piso' }
-          ]
-        }
-      ],
-      item: [
-        { title: 'Mi Perfil' },
-        { title: 'Cerrar Sesión' }
-      ],
-      miniVariant: false
-    }),
-    props: {
-      source: String
+    data () {
+      return {
+        item: [
+          { title: 'Mi Perfil' },
+          { title: 'Cerrar Sesión' }
+        ],
+        clipped: false,
+        drawer: false,
+        fixed: false,
+        items: [
+          {
+            action: 'assignment',
+            title: 'Salas',
+            active: false,
+            items: [
+              { title: 'Primer Piso', to: '/primerPiso' },
+              { title: 'Segundo Piso', to: '/segundoPiso' },
+              { title: 'Tercer Piso', to: '/tercerPiso' }
+            ]
+          },
+          {
+            action: 'content_cut',
+            title: 'Gestión',
+            active: false,
+            items: [
+              { title: 'Gestión Docentes', to: '/crud/gestionDocente' },
+              { title: 'Gestión Asignaturas', to: '/crud/gestionAsignatura' },
+              { title: 'Gestión Carreras', to: '/crud/gestionCarrera' },
+              { title: 'Gestión Sección', to: '/crud/gestionSeccion' },
+              { title: 'Gestión Jornada', to: '/crud/gestionJornada' }
+            ]
+          }
+        ],
+        miniVariant: false,
+        right: true
+      }
+    },
+    methods: {
+      prueba () {
+      }
     }
   }
 </script>

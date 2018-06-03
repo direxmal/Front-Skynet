@@ -1,5 +1,5 @@
 <template>
-  <h1>Primer Piso</h1>
+  <h1>Segundo Piso</h1>
 </template>
 <script>
 export default {
