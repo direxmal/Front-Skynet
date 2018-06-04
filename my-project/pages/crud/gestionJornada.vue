@@ -6,7 +6,7 @@
   					 <v-form @submit.prevent="agregarSeccion" v-model="valid" ref="fAgregarSeccion" lazy-validation>
   		 <v-card>
   			 <v-card-title>
-  				 <span class="headline">Nueva Sección</span>
+  				 <span class="headline">Nueva Jornada</span>
   			 </v-card-title>
   			 <v-card-text>
   				 <v-container grid-list-md>
