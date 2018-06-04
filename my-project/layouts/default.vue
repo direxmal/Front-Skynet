@@ -95,7 +95,7 @@
         items: [
           {
             action: 'assignment',
-            title: 'Salas',
+            title: 'Crear Horario',
             active: false,
             items: [
               { title: 'Primer Piso', to: '/primerPiso' },
