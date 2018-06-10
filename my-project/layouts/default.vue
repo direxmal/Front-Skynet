@@ -104,7 +104,7 @@
             ]
           },
           {
-            action: 'content_cut',
+            action: 'edit',
             title: 'Gestión',
             active: false,
             items: [

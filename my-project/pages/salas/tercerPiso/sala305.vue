@@ -1,8 +1,8 @@
 <template>
-  <h1>Primer Piso</h1>
-
+  <h1>Tercer Piso</h1>
 </template>
 <script>
 export default {
+  layout: 'vistaUsuario'
 }
 </script>
