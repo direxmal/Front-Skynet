@@ -47,7 +47,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-tooltip bottom>
-         <v-btn slot="activator" @click="sumarUno" icon dark><v-icon>home</v-icon></v-btn> <!-- Este va al inicio-->
+         <v-btn slot="activator" href="/" icon dark><v-icon>home</v-icon></v-btn> <!-- Este va al inicio-->
         <span>Inicio</span>
       </v-tooltip>
       <v-menu offset-y>
