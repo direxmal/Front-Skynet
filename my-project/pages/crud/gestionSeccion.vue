@@ -1,146 +1,157 @@
 <template>
 	<div>
-		 <!--Dialog Agregar Modulo -->
-     <v-dialog v-model="dialogAdd" max-width="500px" >
-  		 <v-btn dark color="red darken-2"  slot="activator" >Agregar Seccion</v-btn>
-  					 <v-form @submit.prevent="agregarSeccion" v-model="valid" ref="fAgregarSeccion" lazy-validation>
-  		 <v-card>
-  			 <v-card-title>
-  				 <span class="headline">Nueva Sección</span>
-  			 </v-card-title>
-  			 <v-card-text>
-  				 <v-container grid-list-md>
-  					 <v-layout wrap>
-  						 <v-flex xs12>
-  							 <v-text-field label="Nombre Seccion" :counter="20" :rules="textoRules" ref="txtNombre" id="nombreSeccion"  required></v-text-field>
-  						 </v-flex>
-							 <v-flex xs12>
-								 <v-text-field label="Jornada" :counter="20" :rules="textoRules" ref="txtNombre" id="nombreSeccion"  required></v-text-field>
-							 </v-flex>
-							 <v-flex xs12>
-								 <v-text-field label="Carrera" :counter="20" :rules="textoRules" ref="txtNombre" id="nombreSeccion"  required></v-text-field>
-							 </v-flex>
-  					 </v-layout>
-  				 </v-container>
-  			 </v-card-text>
-  			 <v-card-actions>
-  				 <v-spacer></v-spacer>
-  				 <v-btn color="blue darken-1" @click="clearAddModal" flat>Cancelar</v-btn>
-  				 <v-btn color="blue darken-1" type="submit" flat >Guardar</v-btn>
-  			 </v-card-actions>
-  		 </v-card>
-  		 </v-form>
-  	 </v-dialog>
-	 <!-- Fin Dialog Agregar Modulo -->
-	 <!--Dialog Editar Subcategoria
-	 	 <v-dialog v-model="dialogEdit" max-width="500px">
-	 		<v-form @submit.prevent="editSeccion" ref="fEditarSeccion">
-	 	<v-card>
-	 		<v-card-title>
-	 			<span class="headline">Editar Seccion</span>
-	 		</v-card-title>
-	 		<v-card-text>
-	 			<v-container grid-list-md>
-	 				<v-layout wrap>
-	 					<v-flex xs12 sm6 md4 style="display:none;">
-	 						<v-text-field label="Nombre" v-model="editedItem.id" name="idEdit"></v-text-field>
-	 					</v-flex>
-	 					<v-flex xs12 sm12 md12>
-	 						<v-text-field label="Nombre" :counter="20" :rules="textoRules" v-model="editedItem.nombre" name="nombreEdit"></v-text-field>
-	 					</v-flex>
-	 					 <v-flex xs3>
-	 						 <v-subheader>Modulo : </v-subheader>
-	 					</v-flex>
-	 					<v-flex xs9>
-	 			<v-select
-	 				:items="modulo"
-	 				item-text="nombre"
-	 				item-value="id"
-	 				@select='onChangeSelect'
-	 				v-model="editedItem.id_modulo.id"
-	 				:error-messages="errorMessages"
-	 				search-input
-	 				autocomplete
-	 				label="Modulo"
-	 				single-line
-	 			></v-select>
-	 		</v-flex>
-	 				</v-layout>
-	 			</v-container>
-	 		</v-card-text>
-	 		<v-card-actions>
-	 			<v-spacer></v-spacer>
-	 			<v-btn color="blue darken-1" flat @click.native="	cerrarModalEdit">Cancelar</v-btn>
-	 			<v-btn color="blue darken-1" type="submit" flat>Guardar</v-btn>
-	 		</v-card-actions>
-	 	</v-card>
+
+		<!-- Dialog Agregar Jornada -->
+			<v-dialog v-model="dialogAdd" max-width="500px">
+				<v-btn dark color="red dark-2"  slot="activator" >Agregar Sección</v-btn>
+							<v-form @submit.prevent="agregarSeccion" v-model="valid" ref="fAgregarSeccion" lazy-validation>
+				<v-card>
+					<v-card-title>
+						<span class="headline">Agregar Sección</span>
+					</v-card-title>
+					<v-card-text>
+						<v-container grid-list-md>
+							<v-layout wrap>
+								<v-flex xs12 sm12 md12>
+									<v-text-field label="Nombre"  :counter="20" name="nombreSeccion" ref="txtNombre" v-model="addItem.nombreSeccion" required></v-text-field>
+								</v-flex>
+								<v-flex xs3>
+                 <v-subheader>Carrera : </v-subheader>
+              </v-flex>
+              <v-flex xs9>
+          <v-select
+            :items="carrera"
+            item-text="nombreCarrera"
+            item-value="idCarrera"
+            v-model="addItem.carrera"
+            search-input
+            v-on:change="onChangeSelectAgregar"
+            :rules="[v => this.selectValidado || 'Campo Vacío']"
+            required
+            autocomplete
+            label="Carrera"
+            single-line
+          ></v-select>
+        </v-flex>
+
+				<v-flex xs3>
+                 <v-subheader>Jornada : </v-subheader>
+              </v-flex>
+              <v-flex xs9>
+          <v-select
+            :items="jornada"
+            item-text="nombreJornada"
+            item-value="idJornada"
+            v-model="addItem.jornada"
+            search-input
+            v-on:change="onChangeSelectAgregar2"
+            :rules="[v => this.selectValidado2 || 'Campo Vacío']"
+            required
+            autocomplete
+            label="Jornada"
+            single-line
+          ></v-select>
+        </v-flex>
+
+							</v-layout>
+						</v-container>
+					</v-card-text>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="blue darken-1" flat @click="clearAddModal">Cancelar</v-btn>
+						<v-btn color="blue darken-1" type="submit" flat >Guardar</v-btn>
+					</v-card-actions>
+				</v-card>
+				</v-form>
+			</v-dialog>
+			<!-- Fin Dialog Agregar Jornada -->
+
+	 <!-- Dialog Eliminar Jornada -->
+	 <v-dialog v-model="dialogDelete" max-width="500px">
+	  <v-form @submit.prevent="eliminarSeccion" ref="fBorrarSeccion">
+	 <v-card>
+	  <v-card-title>
+	 	 <span class="headline">¿Estás seguro de eliminar esta Sección?</span>
+	  </v-card-title>
+	  <v-card-text>
+	 	 <v-container grid-list-md>
+	 		 <v-layout wrap>
+	 			 <v-flex xs12>
+	 			 <v-list dense >
+	 				 <v-list-tile class="hoverMouse">
+	 				 <v-list-tile-title>ID</v-list-tile-title>
+	 				 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+	 				 <v-list-tile-title>{{ deleteItem.idSeccion }}</v-list-tile-title>
+	 			 </v-list-tile>
+	 			 <v-list-tile class="hoverMouse">
+	 				 <v-list-tile-title>Nombre</v-list-tile-title>
+	 				 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+	 				 <v-list-tile-title>{{ deleteItem.nombreSeccion }}</v-list-tile-title>
+	 			 </v-list-tile>
+	 			 <v-list-tile class="hoverMouse">
+	 				 <v-list-tile-title>Nombre</v-list-tile-title>
+	 				 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+	 				 <v-list-tile-title>{{ deleteItem }}</v-list-tile-title>
+	 			 </v-list-tile>
+				 <v-list-tile class="hoverMouse">
+	 				 <v-list-tile-title>Nombre</v-list-tile-title>
+	 				 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+	 				 <v-list-tile-title>{{ deleteItem }}</v-list-tile-title>
+	 			 </v-list-tile>
+	 		 </v-list>
+	 	 </v-flex>
+	 		 </v-layout>
+	 	 </v-container>
+	  </v-card-text>
+	  <v-card-actions>
+	 	 <v-spacer></v-spacer>
+	 	 <v-btn color="blue darken-1" flat @click.native="cerrarModalDelete">Cancelar</v-btn>
+	 	 <v-btn color="blue darken-1" type="submit" flat>Eliminar</v-btn>
+	  </v-card-actions>
+	 </v-card>
 	 </v-form>
 	 </v-dialog>
-	 Fin Dialog Editar Subcategoria -->
-     <!-- Dialog Detalle Modulo
-        <v-dialog v-model="dialogDetail" max-width="500px">
-        <form @submit.prevent="">
-      <v-card>
+	 <!-- Fin Dialog Eliminar Jornada -->
 
-          <v-card-title><h1> Detalle de Modulo</h1></v-card-title>
-          <v-divider></v-divider>
-          <v-list dense >
-              <v-list-tile class="hoverMouse">
-              <v-list-tile-title>ID</v-list-tile-title>
-              <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-              <v-list-tile-title>{{ detailItem.id }}</v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile class="hoverMouse">
-              <v-list-tile-title>Nombre</v-list-tile-title>
-              <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-              <v-list-tile-title>{{ detailItem.nombre }}</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="cerrarModalDetail">Cerrar</v-btn>
-        </v-card-actions>
-      </v-card>
-       </form>
-     </v-dialog>
- Fin Dialog Detalle Modulo -->
 
-     <!-- Dialog Eliminar Modulo
-       <v-dialog v-model="dialogDelete" max-width="500px">
-        <v-form @submit.prevent="eliminarModulo" ref="fEditarHerramientas">
-      <v-card>
-        <v-card-title>
-          <span class="headline">¿Estás seguro de eliminar este módulo?</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12>
-              <v-list dense >
-                <v-list-tile class="hoverMouse">
-                <v-list-tile-title>ID</v-list-tile-title>
-                <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-                <v-list-tile-title>{{ deleteItem.id }}</v-list-tile-title>
-              </v-list-tile>
-              <v-list-tile class="hoverMouse">
-                <v-list-tile-title>Nombre</v-list-tile-title>
-                <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-                <v-list-tile-title>{{ deleteItem.nombre }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="cerrarModalDelete">Cancelar</v-btn>
-          <v-btn color="blue darken-1" type="submit" flat>Eliminar</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-form>
-    </v-dialog>
-   Fin Dialog Eliminar Modulo -->
+
+	 <!-- Dialog Detalle jornada -->
+		 <v-dialog v-model="dialogDetail" max-width="500px">
+		 <form @submit.prevent="">
+	 <v-card>
+
+			 <v-card-title><h1> Detalle de Jornada</h1></v-card-title>
+			 <v-divider></v-divider>
+			 <v-list dense >
+					 <v-list-tile class="hoverMouse">
+					 <v-list-tile-title>ID</v-list-tile-title>
+					 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+					 <v-list-tile-title>{{ detailItem.idSeccion }}</v-list-tile-title>
+				 </v-list-tile>
+				 <v-list-tile class="hoverMouse">
+					 <v-list-tile-title>Nombre</v-list-tile-title>
+					 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+					 <v-list-tile-title>{{ detailItem.nombreSeccion }}</v-list-tile-title>
+				 </v-list-tile>
+				 <v-list-tile class="hoverMouse">
+					 <v-list-tile-title>Carrera</v-list-tile-title>
+					 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+					 <v-list-tile-title>{{ detailItem }}</v-list-tile-title>
+				 </v-list-tile>
+				 <v-list-tile class="hoverMouse">
+					 <v-list-tile-title>Jornada</v-list-tile-title>
+					 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+					 <v-list-tile-title>{{ detailItem }}</v-list-tile-title>
+				 </v-list-tile>
+			 </v-list>
+		 <v-card-actions>
+			 <v-spacer></v-spacer>
+			 <v-btn color="blue darken-1" flat @click.native="cerrarModalDetail">Cerrar</v-btn>
+		 </v-card-actions>
+	 </v-card>
+		</form>
+	</v-dialog>
+ <!-- Fin Dialog Detalle jornada -->
 
 	<!-- Tabla -->
     <v-card>
@@ -157,17 +168,17 @@
       </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="secciones"
+      :items="items"
       :search="search"
       must-sort
       :pagination.sync="pagination"
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.id }}</td>
-        <td class="text-xs-center">{{ props.item.nombre }}</td>
-				<td class="text-xs-center">{{ props.item.id_modulo.nombre }}</td>
-			 <td class="text-xs-center" style="display:none;">{{ props.item.id_modulo.id }}</td>
+        <td class="text-xs-center">{{ props.item.idSeccion }}</td>
+        <td class="text-xs-center">{{ props.item.nombreSeccion }}</td>
+				<td class="text-xs-center">{{ props.item.carrera.nombreCarrera }}</td>
+				<td class="text-xs-center">{{ props.item.jornada.nombreJornada  }}</td>
         <td class="justify-center layout px-0">
         <v-tooltip top>
           <v-btn icon slot="activator" class="mx-0" @click="modalDetalle(props.item)" >
@@ -201,11 +212,220 @@
 	</div>
 </template>
 <script>
+import axios from 'axios' // Modulo para realizar las peticiones
+import config from '../../config.vue' //conexion
+import validaciones from '../../validaciones.vue' //validaciones de las cosas
 export default {
-  data: () => ({
-    pagination: {},
-    search: ''
-  })
 
+	components: { config },
+		layout: 'default',
+	data: () => ({
+		errorMessages: [],
+		dialogAdd: false, // prop para abrir y cerrar modal de Agregar Seccion
+		dialogEdit: false, // prop para abrir y cerrar modal de Editar Seccion
+		dialogDetail: false, // prop para abrir y cerrar modal de Detalle Seccion
+		dialogDelete: false, // prop para abrir y cerrar modal de Delete Seccion
+		pagination: {}, // paginación de la tabla
+		editedIndex: -1,
+		deleteIndex: -1,
+		carrerasSelectID: {},
+		carreraSelectIDEdit: {},
+		jornadaSelectID: {},
+		jornadaSelectIDEdit: {},
+		selectValidado: false,
+		selectValidado2: false,
+		carrera: [],
+		jornada: [],
+		value: '',
+		search: '',
+		snackbar: false,
+		color: 'green',
+		mode: '',
+		timeout: 3000,
+		text: 'Se ha agregado con exito',
+		headers: [ // Encabezados de  la tabla
+			{
+				text: 'ID',
+				value: 'idSeccion',
+				sortable: true,
+				width: '25%',
+				align: 'center'
+			},
+			{ text: 'Nombre', value: 'nombreSeccion', width: '25%', align: 'center' },
+			{ text: 'Carrera', value: 'idCarrera', width: '25%', align: 'center' },
+			{ text: 'Jornada', value: 'nombreJornada', width: '25%', align: 'center' },
+			{ text: 'Opciones', sortable: false, width: '25%', align: 'center' }
+		],
+		textoRules: validaciones.textoRules,
+		items: [],
+		valid: true,
+		addItem: {
+			id: 0,
+			nombreSeccion: ''
+		},
+		editedItem: { // prop temporal que guarda el objeto a editar o eliminar
+			id: 0,
+			nombreSeccion: ''
+
+		},
+		detailItem: {
+			id: 0,
+			nombreSeccion: ''
+
+		},
+		deleteItem: {
+			id: 0,
+			nombreSeccion: ''
+
+
+		},
+		defaultItem: {
+			name: '',
+			calories: 0,
+			fat: 0,
+			carbs: 0,
+			protein: 0
+		}
+	}),
+	computed: {
+		formTitle () {
+			return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+		}
+	},
+	watch: {
+		dialog (val) {
+			val || this.close()
+		},
+		verVal (val) {
+			console.log(val)
+			console.log(this.value)
+		}
+	},
+	created () {
+		this.initialize()
+		this.cargarSelectCat()
+		this.cargarSelectCat2()
+	},
+	methods: {
+		onChangeSelect (val) {
+			this.editedItem.carrera = val.target.value
+		},
+		onChangeSelect (val) {
+			this.editedItem.jornada = val.target.value
+		},
+		onChangeSelectAgregar (val) {
+			this.selectValidado = true
+		},
+		onChangeSelectAgregar2 (val) {
+			this.selectValidado2 = true
+		},
+		cargarSelectCat () {
+			axios.get(config.API_LOCATION + `/skynet/carrera/`) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+				.then((response) => {
+					this.carrera = response.data
+				})
+				.catch(e => {
+				})
+		},
+		cargarSelectCat2 () {
+			axios.get(config.API_LOCATION + `/skynet/jornada/`) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+				.then((response) => {
+					this.jornada = response.data
+				})
+				.catch(e => {
+				})
+		},
+		initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
+			axios.get(config.API_LOCATION + `/skynet/seccion/`) // petición GET a Seccion para traer todos los objetos jornada
+				.then((response) => {
+					//console.log(response.data)
+					this.items = response.data
+				})
+				.catch(e => {
+				})
+		},
+		agregarSeccion (e) { // función para agregar un nuevo Seccion
+			var nombre = this.addItem.nombreSeccion
+			var carrera = this.addItem.carrera
+			var jornada = this.addItem.jornada
+			if (this.$refs.fAgregarSeccion.validate()) {
+				//console.log(nombre + '**** ' + carrera + '**** ' + jornada)
+				axios.post(config.API_LOCATION + '/skynet/seccion/', { // petición POST a Seccion para agregar
+					nombreSeccion: '' + nombre + '',
+					carrera : {idCarrera: carrera},
+					jornada : {idJornada: jornada}
+				})
+					.then((response) => {
+						this.initialize()
+						this.dialogAdd = false // cerrar el modal
+						this.text = 'Se ha agregado correctamente'
+						this.snackbar = true
+						this.$refs.fAgregarSección.reset()
+						this.selectValidado = false
+						this.selectValidado2 = false
+					}
+					)
+			}
+		},
+		editJornada () { // función para editar la Seccion
+			var id = this.editedItem.idJornada // obtener id del objeto que se desea editar formulario
+			var nombre = this.editedItem.nombreJornada // obtener nombre del objeto que se desea editar formulario
+			var detalle = this.editedItem.detalleJornada
+			if (this.$refs.fEditarJornada.validate()) {
+				axios.put(config.API_LOCATION + '/skynet/jornada/' + id + '', {// petición put para editar el tipo
+					nombreJornada: '' + nombre + '',
+					detalleJornada: '' + detalle + ''
+				})
+					.then(response => {
+						this.initialize()
+						this.text = 'Se ha modificado correctamente'
+						this.snackbar = true
+						this.dialogEdit = false // cerrar modal
+					})
+					.catch(function (error) {
+						console.log(error)
+					})
+			}
+		},
+		eliminarSeccion (e) {
+		axios.delete(config.API_LOCATION + '/skynet/seccion/' + this.deleteItem.idSeccion + '') // petición GET a Tipo para traer a todos los objetos "tipo"
+			.then((response) => {
+				this.initialize()
+				this.dialogDelete = false
+			})
+			.catch(e => {
+			})
+	},
+	modalEdit (item) {
+	//  this.editedIndex = this.secciones.indexOf(item)
+		this.editedItem = Object.assign({}, item)
+		this.dialogEdit = true
+	},
+	modalDelete (item) {
+		this.deleteItem = item
+		this.dialogDelete = true
+	},
+cerrarModalEdit () {
+			this.dialogEdit = false
+		},
+modalDetalle (item) {
+	this.detailItem = this.items.indexOf(item) // obtener posición del array
+	this.detailItem = Object.assign({}, item)
+	this.dialogDetail = true
+},
+cerrarModalDelete () {
+		this.dialogDelete =  false
+	},
+cerrarModalDetail () {
+			this.dialogDetail = false
+		},
+			clearAddModal () {
+		        // this.$refs.fAgregarSubCat.reset()
+		        this.$refs.fAgregarSeccion.reset()
+		        this.selectValidado = false
+						 this.selectValidado2 = false
+		      }
+
+	}
 }
 </script>

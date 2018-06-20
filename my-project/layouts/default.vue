@@ -112,6 +112,7 @@
               { title: 'Gestión Asignaturas', to: '/crud/gestionAsignatura' },
               { title: 'Gestión Carreras', to: '/crud/gestionCarrera' },
               { title: 'Gestión Sección', to: '/crud/gestionSeccion' },
+              { title: 'Gestión Sala', to: '/crud/gestionSalas' },
               { title: 'Gestión Jornada', to: '/crud/gestionJornada' }
             ]
           }

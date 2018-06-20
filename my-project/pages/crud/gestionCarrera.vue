@@ -1,64 +1,97 @@
 <template>
 	<div>
-		 <!--Dialog Agregar Modulo -->
-     <v-dialog v-model="dialogAdd" max-width="500px" >
-  		 <v-btn dark color="red darken-2"  slot="activator" >Agregar Carrera</v-btn>
-  					 <v-form @submit.prevent="agregarSeccion" v-model="valid" ref="fAgregarSeccion" lazy-validation>
-  		 <v-card>
-  			 <v-card-title>
-  				 <span class="headline">Nueva Carrera</span>
-  			 </v-card-title>
-  			 <v-card-text>
-  				 <v-container grid-list-md>
-  					 <v-layout wrap>
-  						 <v-flex xs12>
-  							 <v-text-field label="Nombre" :counter="20" :rules="textoRules" ref="txtNombre" id="nombreSeccion"  required></v-text-field>
-  						 </v-flex>
-  					 </v-layout>
-  				 </v-container>
-  			 </v-card-text>
-  			 <v-card-actions>
-  				 <v-spacer></v-spacer>
-  				 <v-btn color="blue darken-1" @click="clearAddModal" flat>Cancelar</v-btn>
-  				 <v-btn color="blue darken-1" type="submit" flat >Guardar</v-btn>
-  			 </v-card-actions>
-  		 </v-card>
-  		 </v-form>
-  	 </v-dialog>
-	 <!-- Fin Dialog Agregar Modulo -->
-	 <!--Dialog Editar Subcategoria
+		<v-snackbar
+				 :timeout="timeout"
+				 :color="color"
+				 :multi-line="mode === 'multi-line'"
+				 :vertical="mode === 'vertical'"
+				 v-model="snackbar"
+			 >
+				 {{ text }}
+				 <v-btn dark flat @click.native="snackbar = false">Cerrar</v-btn>
+			 </v-snackbar>
+		<!-- Dialog Agregar Jornada -->
+			<v-dialog v-model="dialogAdd" max-width="500px">
+				<v-btn dark color="red dark-2"  slot="activator" >Agregar Carrera</v-btn>
+							<v-form @submit.prevent="agregarCarrera" v-model="valid" ref="fAgregarCarrera" lazy-validation>
+				<v-card>
+					<v-card-title>
+						<span class="headline">Agregar Carrera</span>
+					</v-card-title>
+					<v-card-text>
+						<v-container grid-list-md>
+							<v-layout wrap>
+								<v-flex xs12 sm12 md12>
+									<v-text-field label="Nombre"  :counter="40" name="nombreCarrera" :rules="textoRules2" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
+								</v-flex>
+								<v-flex xs12 sm12 md12>
+									<v-text-field label="Detalle"  :counter="40" name="detalleCarrera" :rules="textoRules2" ref="txtDetalle" v-model="addItem.detalle"  required></v-text-field>
+								</v-flex>
+							</v-layout>
+						</v-container>
+					</v-card-text>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="blue darken-1" flat @click="clearAddModal">Cancelar</v-btn>
+						<v-btn color="blue darken-1" type="submit" flat >Guardar</v-btn>
+					</v-card-actions>
+				</v-card>
+				</v-form>
+			</v-dialog>
+			<!-- Fin Dialog Agregar Jornada -->
+
+		 <!-- Dialog Detalle Carrera -->
+			 <v-dialog v-model="dialogDetail" max-width="500px">
+			 <form @submit.prevent="">
+		 <v-card>
+
+				 <v-card-title><h1> Detalle de Carrera</h1></v-card-title>
+				 <v-divider></v-divider>
+				 <v-list dense >
+						 <v-list-tile class="hoverMouse">
+						 <v-list-tile-title>ID</v-list-tile-title>
+						 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+						 <v-list-tile-title>{{ detailItem.idCarrera }}</v-list-tile-title>
+					 </v-list-tile>
+					 <v-list-tile class="hoverMouse">
+						 <v-list-tile-title>Nombre</v-list-tile-title>
+						 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+						 <v-list-tile-title>{{ detailItem.nombreCarrera }}</v-list-tile-title>
+					 </v-list-tile>
+					 <v-list-tile class="hoverMouse">
+						 <v-list-tile-title>Nombre</v-list-tile-title>
+						 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+						 <v-list-tile-title>{{ detailItem.detalleCarrera }}</v-list-tile-title>
+					 </v-list-tile>
+				 </v-list>
+			 <v-card-actions>
+				 <v-spacer></v-spacer>
+				 <v-btn color="blue darken-1" flat @click.native="cerrarModalDetail">Cerrar</v-btn>
+			 </v-card-actions>
+		 </v-card>
+			</form>
+		</v-dialog>
+	 <!-- Fin Dialog Detalle Carrera -->
+
+	 <!-- Dialog Editar Carrera -->
 	 	 <v-dialog v-model="dialogEdit" max-width="500px">
-	 		<v-form @submit.prevent="editSeccion" ref="fEditarSeccion">
+	 		<v-form @submit.prevent="editCarrera" ref="fEditarCarrera">
 	 	<v-card>
 	 		<v-card-title>
-	 			<span class="headline">Editar Seccion</span>
+	 			<span class="headline">Editar Carrera</span>
 	 		</v-card-title>
 	 		<v-card-text>
 	 			<v-container grid-list-md>
 	 				<v-layout wrap>
 	 					<v-flex xs12 sm6 md4 style="display:none;">
-	 						<v-text-field label="Nombre" v-model="editedItem.id" name="idEdit"></v-text-field>
+	 						<v-text-field label="Nombre" v-model="editedItem.idCarrera" name="idEdit"></v-text-field>
 	 					</v-flex>
 	 					<v-flex xs12 sm12 md12>
-	 						<v-text-field label="Nombre" :counter="20" :rules="textoRules" v-model="editedItem.nombre" name="nombreEdit"></v-text-field>
+	 						<v-text-field label="Nombre" :counter="40" :rules="textoRules2" v-model="editedItem.nombreCarrera" name="nombreEdit"></v-text-field>
 	 					</v-flex>
-	 					 <v-flex xs3>
-	 						 <v-subheader>Modulo : </v-subheader>
+	 					<v-flex xs12 sm12 md12>
+	 						<v-text-field label="Detalle" :counter="40" :rules="textoRules2" v-model="editedItem.detalleCarrera" name="detalleEdit"></v-text-field>
 	 					</v-flex>
-	 					<v-flex xs9>
-	 			<v-select
-	 				:items="modulo"
-	 				item-text="nombre"
-	 				item-value="id"
-	 				@select='onChangeSelect'
-	 				v-model="editedItem.id_modulo.id"
-	 				:error-messages="errorMessages"
-	 				search-input
-	 				autocomplete
-	 				label="Modulo"
-	 				single-line
-	 			></v-select>
-	 		</v-flex>
 	 				</v-layout>
 	 			</v-container>
 	 		</v-card-text>
@@ -68,73 +101,52 @@
 	 			<v-btn color="blue darken-1" type="submit" flat>Guardar</v-btn>
 	 		</v-card-actions>
 	 	</v-card>
-	 </v-form>
-	 </v-dialog>
-	 Fin Dialog Editar Subcategoria -->
-     <!-- Dialog Detalle Modulo
-        <v-dialog v-model="dialogDetail" max-width="500px">
-        <form @submit.prevent="">
-      <v-card>
+	  </v-form>
+	  </v-dialog>
+	  <!-- Fin Dialog Editar Carrera -->
 
-          <v-card-title><h1> Detalle de Modulo</h1></v-card-title>
-          <v-divider></v-divider>
-          <v-list dense >
-              <v-list-tile class="hoverMouse">
-              <v-list-tile-title>ID</v-list-tile-title>
-              <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-              <v-list-tile-title>{{ detailItem.id }}</v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile class="hoverMouse">
-              <v-list-tile-title>Nombre</v-list-tile-title>
-              <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-              <v-list-tile-title>{{ detailItem.nombre }}</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="cerrarModalDetail">Cerrar</v-btn>
-        </v-card-actions>
-      </v-card>
-       </form>
-     </v-dialog>
- Fin Dialog Detalle Modulo -->
+	 <!-- Dialog Eliminar Carrera -->
+	 <v-dialog v-model="dialogDelete" max-width="500px">
+		<v-form @submit.prevent="eliminarCarrera" ref="fBorrarCarrera">
+	<v-card>
+		<v-card-title>
+			<span class="headline">¿Estás seguro de eliminar esta Carrera?</span>
+		</v-card-title>
+		<v-card-text>
+			<v-container grid-list-md>
+				<v-layout wrap>
+					<v-flex xs12>
+					<v-list dense >
+						<v-list-tile class="hoverMouse">
+						<v-list-tile-title>ID</v-list-tile-title>
+						<v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+						<v-list-tile-title>{{ deleteItem.idCarrera }}</v-list-tile-title>
+					</v-list-tile>
+					<v-list-tile class="hoverMouse">
+						<v-list-tile-title>Nombre</v-list-tile-title>
+						<v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+						<v-list-tile-title>{{ deleteItem.nombreCarrera }}</v-list-tile-title>
+					</v-list-tile>
+					<v-list-tile class="hoverMouse">
+						<v-list-tile-title>Nombre</v-list-tile-title>
+						<v-list-tile-title class="text-lg-center">:</v-list-tile-title>
+						<v-list-tile-title>{{ deleteItem.detalleCarrera }}</v-list-tile-title>
+					</v-list-tile>
+				</v-list>
+			</v-flex>
+				</v-layout>
+			</v-container>
+		</v-card-text>
+		<v-card-actions>
+			<v-spacer></v-spacer>
+			<v-btn color="blue darken-1" flat @click.native="cerrarModalDelete">Cancelar</v-btn>
+			<v-btn color="blue darken-1" type="submit" flat>Eliminar</v-btn>
+		</v-card-actions>
+	</v-card>
+</v-form>
+</v-dialog>
+<!-- Fin Dialog Eliminar Carrera -->
 
-     <!-- Dialog Eliminar Modulo
-       <v-dialog v-model="dialogDelete" max-width="500px">
-        <v-form @submit.prevent="eliminarModulo" ref="fEditarHerramientas">
-      <v-card>
-        <v-card-title>
-          <span class="headline">¿Estás seguro de eliminar este módulo?</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12>
-              <v-list dense >
-                <v-list-tile class="hoverMouse">
-                <v-list-tile-title>ID</v-list-tile-title>
-                <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-                <v-list-tile-title>{{ deleteItem.id }}</v-list-tile-title>
-              </v-list-tile>
-              <v-list-tile class="hoverMouse">
-                <v-list-tile-title>Nombre</v-list-tile-title>
-                <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-                <v-list-tile-title>{{ deleteItem.nombre }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="cerrarModalDelete">Cancelar</v-btn>
-          <v-btn color="blue darken-1" type="submit" flat>Eliminar</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-form>
-    </v-dialog>
-   Fin Dialog Eliminar Modulo -->
 
 	<!-- Tabla -->
     <v-card>
@@ -151,17 +163,16 @@
       </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="secciones"
+      :items="items"
       :search="search"
       must-sort
       :pagination.sync="pagination"
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.id }}</td>
-        <td class="text-xs-center">{{ props.item.nombre }}</td>
-				<td class="text-xs-center">{{ props.item.id_modulo.nombre }}</td>
-			 <td class="text-xs-center" style="display:none;">{{ props.item.id_modulo.id }}</td>
+        <td class="text-xs-center">{{ props.item.idCarrera }}</td>
+        <td class="text-xs-center">{{ props.item.nombreCarrera }}</td>
+				<td class="text-xs-center">{{ props.item.detalleCarrera }}</td>
         <td class="justify-center layout px-0">
         <v-tooltip top>
           <v-btn icon slot="activator" class="mx-0" @click="modalDetalle(props.item)" >
@@ -195,11 +206,180 @@
 	</div>
 </template>
 <script>
+import axios from 'axios' // Modulo para realizar las peticiones
+import config from '../../config.vue' //conexion
+import validaciones from '../../validaciones.vue' //validaciones de las cosas
 export default {
-  data: () => ({
-    pagination: {},
-    search: ''
-  })
 
+	components: { config },
+		layout: 'default',
+	data: () => ({
+		errorMessages: [],
+		dialogAdd: false, // prop para abrir y cerrar modal de Agregar Subcategoría
+		dialogEdit: false, // prop para abrir y cerrar modal de Editar Subcategoría
+		dialogDetail: false, // prop para abrir y cerrar modal de Detalle Subcategoría
+		dialogDelete: false, // prop para abrir y cerrar modal de Delete Subcategoría
+		pagination: {}, // paginación de la tabla
+		editedIndex: -1,
+		deleteIndex: -1,
+		value: '',
+		search: '',
+		snackbar: false,
+		color: 'green',
+		mode: '',
+		timeout: 3000,
+		text: 'Se ha agregado con exito',
+		headers: [ // Encabezados de  la tabla
+			{
+				text: 'ID',
+				value: 'idCarrera',
+				sortable: true,
+				width: '25%',
+				align: 'center'
+			},
+			{ text: 'Nombre', value: 'nombreCarrera', width: '25%', align: 'center' },
+			{ text: 'Detalle', value: 'detalleCarrera', width: '25%', align: 'center' },
+			{ text: 'Opciones', sortable: false, width: '25%', align: 'center' }
+		],
+		textoRules: validaciones.textoRules,
+		textoRules2: validaciones.textoRules2,
+		items: [],
+		valid: true,
+		addItem: {
+			id: 0,
+			detalleCarrera: '',
+			nombreCarrera: ''
+		},
+		editedItem: { // prop temporal que guarda el objeto a editar o eliminar
+			id: 0,
+			detalleCarrera: '',
+			nombreCarrera: ''
+		},
+		detailItem: {
+			id: 0,
+			detalleCarrera: '',
+			nombreCarrera: ''
+		},
+		deleteItem: {
+			id: 0,
+			detalleCarrera: '',
+			nombreCarrera: ''
+
+		},
+		defaultItem: {
+			name: '',
+			calories: 0,
+			fat: 0,
+			carbs: 0,
+			protein: 0
+		}
+	}),
+	computed: {
+		formTitle () {
+			return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+		}
+	},
+	watch: {
+		dialog (val) {
+			val || this.close()
+		},
+		verVal (val) {
+			console.log(val)
+			console.log(this.value)
+		}
+	},
+	created () {
+		this.initialize()
+	},
+	methods: {
+		initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
+			axios.get(config.API_LOCATION + `/skynet/carrera/`) // petición GET a Subcategoría para traer todos los objetos jornada
+				.then((response) => {
+					//console.log(response.data)
+					this.items = response.data
+				})
+				.catch(e => {
+				})
+		},
+		agregarCarrera (e) { // función para agregar un nuevo Subcategoría
+			var nombre = this.addItem.nombre
+			var detalle = this.addItem.detalle
+			if (this.$refs.fAgregarCarrera.validate()) {
+				console.log(nombre + '**** ' + detalle)
+				axios.post(config.API_LOCATION + '/skynet/carrera/', { // petición POST a Subcategoría para agregar
+				nombreCarrera: '' + nombre + '',
+				detalleCarrera: '' + detalle + ''
+				})
+					.then((response) => {
+						this.initialize()
+						this.dialogAdd = false // cerrar el modal
+						this.text = 'Se ha agregado correctamente'
+						this.snackbar = true
+						this.$refs.fAgregarCarrera.reset()
+						this.selectValidado = false
+					}
+					)
+			}
+		},
+		editCarrera () { // función para editar la Subcategoría
+			var id = this.editedItem.idCarrera // obtener id del objeto que se desea editar formulario
+			var nombre = this.editedItem.nombreCarrera // obtener nombre del objeto que se desea editar formulario
+			var detalle = this.editedItem.detalleCarrera
+			if (this.$refs.fEditarCarrera.validate()) {
+				axios.put(config.API_LOCATION + '/skynet/carrera/' + id + '', {// petición put para editar el tipo
+					nombreCarrera: '' + nombre + '',
+					detalleCarrera: '' + detalle + ''
+				})
+					.then(response => {
+						this.initialize()
+						this.text = 'Se ha modificado correctamente'
+						this.snackbar = true
+						this.dialogEdit = false // cerrar modal
+					})
+					.catch(function (error) {
+						console.log(error)
+					})
+			}
+		},
+		eliminarCarrera (e) {
+		axios.delete(config.API_LOCATION + '/skynet/carrera/' + this.deleteItem.idCarrera + '') // petición GET a Tipo para traer a todos los objetos "tipo"
+			.then((response) => {
+				this.initialize()
+				this.dialogDelete = false
+			})
+			.catch(e => {
+			})
+	},
+	modalEdit (item) {
+	//  this.editedIndex = this.secciones.indexOf(item)
+		this.editedItem = Object.assign({}, item)
+		this.dialogEdit = true
+	},
+	modalDelete (item) {
+		this.deleteItem = item
+		this.dialogDelete = true
+	},
+cerrarModalEdit () {
+			this.dialogEdit = false
+		},
+modalDetalle (item) {
+	this.detailItem = this.items.indexOf(item) // obtener posición del array
+	this.detailItem = Object.assign({}, item)
+	this.dialogDetail = true
+},
+cerrarModalDelete () {
+		this.dialogDelete =  false
+	},
+cerrarModalDetail () {
+			this.dialogDetail = false
+		},
+		clearAddModal () {
+				this.$refs.txtNombre.reset()
+				this.$refs.txtDetalle.reset()
+				this.dialogAdd = false
+			}
+
+
+	}
 }
 </script>
