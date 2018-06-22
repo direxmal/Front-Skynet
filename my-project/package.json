@@ -16,6 +16,7 @@
     "cookieparser": "^0.1.0",
     "js-cookie": "^2.2.0",
     "nuxt": "^1.0.0",
+    "vue-color": "^2.4.6",
     "vuetify": "^1.0.0"
   },
   "devDependencies": {

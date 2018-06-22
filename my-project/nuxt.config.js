@@ -3,6 +3,9 @@ module.exports = {
   /*
   ** Headers of the page
   */
+  router: {
+    middleware: 'auth'
+  },
   head: {
     title: 'Skynet',
     meta: [
@@ -15,7 +18,7 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ]
   },
-  plugins: ['~/plugins/vuetify.js'],
+  plugins: ['~/plugins/vuetify.js', {src: '~/plugins/vue-color.js', ssr: false}],
   css: [
     '~/assets/style/app.styl'
   ],
@@ -26,9 +29,11 @@ module.exports = {
   /*
   ** Build configuration
   */
+
   build: {
     vendor: [
-      '~/plugins/vuetify.js'
+      '~/plugins/vuetify.js',
+      'vue-color'
     ],
     extractCSS: true,
     /*
@@ -39,7 +44,6 @@ module.exports = {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
-          
           exclude: /(node_modules)/
         })
       }

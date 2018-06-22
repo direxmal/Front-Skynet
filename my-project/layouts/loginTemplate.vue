@@ -35,9 +35,9 @@
           <v-layout align-center justify-center>
           <v-flex xs12 sm3>
             <v-card class="elevation-12">
-              <v-toolbar color="primary" dark>
+              <v-toolbar color= red darken-3 dark>
 
-                  <v-toolbar-title style="font-size:16px;">SIGO-ERP</v-toolbar-title>
+                  <v-toolbar-title style="font-size:16px;">SKYNET</v-toolbar-title>
                     <v-spacer></v-spacer>
             </v-toolbar>
             <v-form @submit.prevent="logearse">
@@ -50,7 +50,7 @@
               <v-card-actions>
                 <v-flex xs12 sm12 md12>
                 <v-spacer></v-spacer>
-                <v-btn block color="primary" dark type="submit">Entrar</v-btn>
+                <v-btn block color= red darken-3 dark type="submit">Entrar</v-btn>
                 <!--
                 <v-btn block color="blue" dark @click="postLogin">Prueba</v-btn>
                 -->
