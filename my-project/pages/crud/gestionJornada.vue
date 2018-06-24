@@ -291,7 +291,7 @@
     },
     methods: {
       initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
-        axios.get(config.API_LOCATION + `/skynet/jornada/`) // petición GET a Subcategoría para traer todos los objetos jornada
+        axios.get(config.API_LOCATION + `/horarios/jornada/`) // petición GET a Subcategoría para traer todos los objetos jornada
           .then((response) => {
             //console.log(response.data)
             this.items = response.data
@@ -304,7 +304,7 @@
         var detalle = this.addItem.detalle
         if (this.$refs.fAgregarJornada.validate()) {
           console.log(nombre + '**** ' + detalle)
-          axios.post(config.API_LOCATION + '/skynet/jornada/', { // petición POST a Subcategoría para agregar
+          axios.post(config.API_LOCATION + '/horarios/jornada/', { // petición POST a Subcategoría para agregar
           nombreJornada: '' + nombre + '',
           detalleJornada: '' + detalle + ''
           })
@@ -324,7 +324,7 @@
         var nombre = this.editedItem.nombreJornada // obtener nombre del objeto que se desea editar formulario
         var detalle = this.editedItem.detalleJornada
         if (this.$refs.fEditarJornada.validate()) {
-          axios.put(config.API_LOCATION + '/skynet/jornada/' + id + '', {// petición put para editar el tipo
+          axios.put(config.API_LOCATION + '/horarios/jornada/' + id + '', {// petición put para editar el tipo
             nombreJornada: '' + nombre + '',
             detalleJornada: '' + detalle + ''
           })
@@ -340,7 +340,7 @@
         }
       },
       eliminarJornada (e) {
-      axios.delete(config.API_LOCATION + '/skynet/jornada/' + this.deleteItem.idJornada + '') // petición GET a Tipo para traer a todos los objetos "tipo"
+      axios.delete(config.API_LOCATION + '/horarios/jornada/' + this.deleteItem.idJornada + '') // petición GET a Tipo para traer a todos los objetos "tipo"
         .then((response) => {
           this.initialize()
           this.dialogDelete = false

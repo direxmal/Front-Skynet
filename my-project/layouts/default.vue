@@ -56,19 +56,13 @@
         </v-btn>
         <!-- La lista de la toolbar-->
         <v-list>
-           <v-list-group
-             v-model="item.active"
-             v-for="item in item"
-             :key="item.title"
-
-           >
-             <v-list-tile slot="activator">
-               <v-list-tile-content>
-                 <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-               </v-list-tile-content>
-             </v-list-tile>
-           </v-list-group>
-         </v-list>
+          <v-list-tile to="/userProfile" >
+            <v-list-tile-title >Perfil</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="logOut">
+            <v-list-tile-title >Cerrar Sesión</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
 
     </v-menu>
     </v-toolbar>
@@ -124,6 +118,13 @@ import Cookie from 'js-cookie'
     },
     methods: {
       prueba () {
+      },
+      logOut() {
+        Cookie.remove('auth')
+        Cookie.remove('rol')
+        //var TOKEN_KEY = "jwtToken"
+        //localStorage.removeItem(TOKEN_KEY)
+        window.location.replace('http://localhost:3000/login')
       }
     }
   }

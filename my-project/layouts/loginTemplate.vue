@@ -84,12 +84,14 @@ import Cookie from 'js-cookie'
       logearse () {
         var user = document.getElementById('user').value
         var password = document.getElementById('password').value
-
-
-        axios.post(config.API_LOCATION + '/auth', { username: user, password: password}) // petición GET a Tipo para traer a todos los objetos "tipo"
+        console.log(user + '**** ' + password)
+        axios.post(config.API_LOCATION + `/auth`,
+         { username: user,
+	          password: password }) // petición GET a Tipo para traer a todos los objetos "tipo"
           .then((response) => {
+            console.log("tomado")
             console.log(response)
-            //alert('LOGEADO')
+            alert('LOGEADO')
             //this.setJwtToken(response.data.token)
             const auth = {
               accessToken: response.data.token
