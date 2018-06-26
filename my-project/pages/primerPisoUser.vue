@@ -1,5 +1,6 @@
 <template>
 <div>
+  <h1>PRIMER PISO</h1>
   <v-container fluid>
      <v-layout row wrap>
        <v-flex xs12 sm6>
@@ -31,11 +32,6 @@
      <td class="text-xs-right">{{ props.item.protein }}</td>
      <td class="text-xs-right">{{ props.item.iron }}</td>
    </template>
-   <template slot="no-data">
-     <v-alert :value="true" color="error" icon="warning">
-       No hay datos cargados aún :(
-     </v-alert>
-   </template>
  </v-data-table>
 </div>
 
@@ -45,7 +41,7 @@ import axios from 'axios' // Modulo para realizar las peticiones
 import config from '../config.vue' //conexion
 export default {
   components: { config },
-    layout: 'default',
+    layout: 'vistaUsuarioUser',
       data: () => ({
           sala: [],
           desserts: [],
@@ -68,17 +64,10 @@ export default {
    		],
       }),
       created () {
-        this.cargarSelectCat()
+
       },
       methods: {
-        cargarSelectCat () {
-          axios.get(config.API_LOCATION + `/skynet/sala/`) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
-            .then((response) => {
-              this.sala = response.data
-            })
-            .catch(e => {
-            })
-        },
+
       }
 }
 </script>

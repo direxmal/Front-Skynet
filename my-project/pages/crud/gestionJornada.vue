@@ -164,7 +164,7 @@
       </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="items"
+      :items="jornadas"
       :search="search"
       must-sort
       :pagination.sync="pagination"
@@ -214,11 +214,13 @@
       layout: 'default',
     data: () => ({
       errorMessages: [],
+      cssSourceMap: false,
       dialogAdd: false, // prop para abrir y cerrar modal de Agregar Subcategoría
       dialogEdit: false, // prop para abrir y cerrar modal de Editar Subcategoría
       dialogDetail: false, // prop para abrir y cerrar modal de Detalle Subcategoría
       dialogDelete: false, // prop para abrir y cerrar modal de Delete Subcategoría
       pagination: {}, // paginación de la tabla
+      jornadas: [],
       editedIndex: -1,
       deleteIndex: -1,
       value: '',
@@ -241,7 +243,7 @@
         { text: 'Opciones', sortable: false, width: '25%', align: 'center' }
       ],
       textoRules: validaciones.textoRules,
-      items: [],
+      jornadas: [],
       valid: true,
       addItem: {
         id: 0,
@@ -291,20 +293,34 @@
     },
     methods: {
       initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
-        axios.get(config.API_LOCATION + `/horarios/jornada/`) // petición GET a Subcategoría para traer todos los objetos jornada
+        /**axios.get(config.API_LOCATION + `/skynet/jornada/`) // petición GET a Subcategoría para traer todos los objetos jornada
           .then((response) => {
             //console.log(response.data)
             this.items = response.data
           })
           .catch(e => {
-          })
+          }) **/
+          console.log("al menos llega aca creo")
+           axios.get(config.API_LOCATION + '/skynet/jornada/', {
+             headers: { "Authorization": "Bearer  " + this.$store.state.auth.accessToken }
+           })
+                          .then((response) => {
+                            alert('weeenaaaa')
+                            console.log(response.data)
+                            this.items = response.data
+
+                    })
+                    .catch(e => {
+                      console.log('malillo malin drama dramon')
+                    })
       },
       agregarJornada (e) { // función para agregar un nuevo Subcategoría
         var nombre = this.addItem.nombre
         var detalle = this.addItem.detalle
         if (this.$refs.fAgregarJornada.validate()) {
           console.log(nombre + '**** ' + detalle)
-          axios.post(config.API_LOCATION + '/horarios/jornada/', { // petición POST a Subcategoría para agregar
+          axios.post(config.API_LOCATION + '/skynet/jornada/', {
+            // petición POST a Subcategoría para agregar
           nombreJornada: '' + nombre + '',
           detalleJornada: '' + detalle + ''
           })
@@ -324,7 +340,7 @@
         var nombre = this.editedItem.nombreJornada // obtener nombre del objeto que se desea editar formulario
         var detalle = this.editedItem.detalleJornada
         if (this.$refs.fEditarJornada.validate()) {
-          axios.put(config.API_LOCATION + '/horarios/jornada/' + id + '', {// petición put para editar el tipo
+          axios.put(config.API_LOCATION + '//jornada/' + id + '', {// petición put para editar el tipo
             nombreJornada: '' + nombre + '',
             detalleJornada: '' + detalle + ''
           })

@@ -31,6 +31,9 @@
   <v-app id="inspire">
     <v-card-media  :src="require('@/assets/style/ColorSunnyOfficeBackground.png')"  height="100%" width:="100%">
     <v-content>
+      <div class="text-xs-center">
+        <v-btn round color=red darken-3 dark @click="logearseUser">Iniciar como Usuario</v-btn>
+      </div>
       <v-container fluid fill-height>
           <v-layout align-center justify-center>
           <v-flex xs12 sm3>
@@ -84,14 +87,14 @@ import Cookie from 'js-cookie'
       logearse () {
         var user = document.getElementById('user').value
         var password = document.getElementById('password').value
-        console.log(user + '**** ' + password)
+      //  console.log(user + '**** ' + password)
         axios.post(config.API_LOCATION + `/auth`,
          { username: user,
 	          password: password }) // petición GET a Tipo para traer a todos los objetos "tipo"
           .then((response) => {
             console.log("tomado")
             console.log(response)
-            alert('LOGEADO')
+            alert('BIENVENIDO')
             //this.setJwtToken(response.data.token)
             const auth = {
               accessToken: response.data.token
@@ -115,9 +118,49 @@ import Cookie from 'js-cookie'
                 })
               */
           })
-          .catch(e => {
 
-           alert(e.response.data)
+        /*
+        if (user === 'admin' && password === 'admin') {
+
+          window.location.replace('http://localhost:3000/')
+        } else {
+          alert('Clave o Usuario Incorrecto')
+        }
+        */
+      },
+      logearseUser () {
+        var user = "user"
+        var password = "password"
+        console.log(user + '**** ' + password)
+        axios.post(config.API_LOCATION + `/auth`,
+         { username: user,
+            password: password }) // petición GET a Tipo para traer a todos los objetos "tipo"
+          .then((response) => {
+            console.log("tomado")
+            console.log(response)
+            alert('BIENVENIDO Usuario')
+            //this.setJwtToken(response.data.token)
+            const auth = {
+              accessToken: response.data.token
+            }
+            this.$store.commit('update', auth) // mutating to store for client rendering
+            Cookie.set('auth', auth) // saving token in cookie for server rendering
+            this.$router.push('/vistaUsuario')
+            //window.location.replace('http://localhost:3000/')
+            //this.$store.commit('setearToken', '' + response.data.token + '')
+            //var token = this.getJwtToken()
+            //console.log(token)
+            /*
+            window.location.replace('http://localhost:3000/')
+            */
+              /*
+              axios.get(config.API_LOCATION + '/user', { headers: { "Authorization": "Bearer " + token }})
+                .then((response) => {
+                  response.data.authorities
+                })
+                .catch(e => {
+                })
+              */
           })
 
         /*
