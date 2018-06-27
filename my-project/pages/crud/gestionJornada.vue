@@ -66,7 +66,7 @@
              <v-list-tile-title>{{ deleteItem.nombre }}</v-list-tile-title>
            </v-list-tile>
            <v-list-tile class="hoverMouse">
-             <v-list-tile-title>Nombre</v-list-tile-title>
+             <v-list-tile-title>Detalle</v-list-tile-title>
              <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
              <v-list-tile-title>{{ deleteItem.detalle }}</v-list-tile-title>
            </v-list-tile>
@@ -136,7 +136,7 @@
               <v-list-tile-title>{{ detailItem.nombre }}</v-list-tile-title>
             </v-list-tile>
             <v-list-tile class="hoverMouse">
-              <v-list-tile-title>Nombre</v-list-tile-title>
+              <v-list-tile-title>Detalle</v-list-tile-title>
               <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
               <v-list-tile-title>{{ detailItem.detalle }}</v-list-tile-title>
             </v-list-tile>
@@ -226,7 +226,7 @@
       value: '',
       search: '',
       snackbar: false,
-      color: 'green',
+      color: 'red darken-3',
       mode: '',
       timeout: 3000,
       text: 'Se ha agregado con exito',
@@ -372,7 +372,7 @@
 				this.dialogEdit = false
 			},
   modalDetalle (item) {
-    this.detailItem = this.items.indexOf(item) // obtener posición del array
+  //  this.detailItem = this.item.indexOf(item) // obtener posición del array
     this.detailItem = Object.assign({}, item)
     this.dialogDetail = true
   },
