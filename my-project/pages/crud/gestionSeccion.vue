@@ -1,7 +1,7 @@
 <template>
 	<div>
 
-		<!-- Dialog Agregar Jornada -->
+		<!-- Dialog Agregar Seccion -->
 			<v-dialog v-model="dialogAdd" max-width="500px">
 				<v-btn dark color="red dark-2"  slot="activator" >Agregar Sección</v-btn>
 							<v-form @submit.prevent="agregarSeccion" v-model="valid" ref="fAgregarSeccion" lazy-validation>
@@ -13,7 +13,7 @@
 						<v-container grid-list-md>
 							<v-layout wrap>
 								<v-flex xs12 sm12 md12>
-									<v-text-field label="Nombre"  :counter="20" name="nombreSeccion" ref="txtNombre" v-model="addItem.nombreSeccion" required></v-text-field>
+									<v-text-field label="Nombre"  :counter="20" name="nombre" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
 								</v-flex>
 								<v-flex xs3>
                  <v-subheader>Carrera : </v-subheader>
@@ -21,8 +21,8 @@
               <v-flex xs9>
           <v-select
             :items="carrera"
-            item-text="nombreCarrera"
-            item-value="idCarrera"
+            item-text="nombre"
+            item-value="id"
             v-model="addItem.carrera"
             search-input
             v-on:change="onChangeSelectAgregar"
@@ -40,8 +40,8 @@
               <v-flex xs9>
           <v-select
             :items="jornada"
-            item-text="nombreJornada"
-            item-value="idJornada"
+            item-text="nombre"
+            item-value="id"
             v-model="addItem.jornada"
             search-input
             v-on:change="onChangeSelectAgregar2"
@@ -81,12 +81,12 @@
 	 				 <v-list-tile class="hoverMouse">
 	 				 <v-list-tile-title>ID</v-list-tile-title>
 	 				 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-	 				 <v-list-tile-title>{{ deleteItem.idSeccion }}</v-list-tile-title>
+	 				 <v-list-tile-title>{{ deleteItem.id }}</v-list-tile-title>
 	 			 </v-list-tile>
 	 			 <v-list-tile class="hoverMouse">
 	 				 <v-list-tile-title>Nombre</v-list-tile-title>
 	 				 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-	 				 <v-list-tile-title>{{ deleteItem.nombreSeccion }}</v-list-tile-title>
+	 				 <v-list-tile-title>{{ deleteItem.nombre }}</v-list-tile-title>
 	 			 </v-list-tile>
 	 			 <v-list-tile class="hoverMouse">
 	 				 <v-list-tile-title>Nombre</v-list-tile-title>
@@ -126,12 +126,12 @@
 					 <v-list-tile class="hoverMouse">
 					 <v-list-tile-title>ID</v-list-tile-title>
 					 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-					 <v-list-tile-title>{{ detailItem.idSeccion }}</v-list-tile-title>
+					 <v-list-tile-title>{{ detailItem.id }}</v-list-tile-title>
 				 </v-list-tile>
 				 <v-list-tile class="hoverMouse">
 					 <v-list-tile-title>Nombre</v-list-tile-title>
 					 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-					 <v-list-tile-title>{{ detailItem.nombreSeccion }}</v-list-tile-title>
+					 <v-list-tile-title>{{ detailItem.nombre }}</v-list-tile-title>
 				 </v-list-tile>
 				 <v-list-tile class="hoverMouse">
 					 <v-list-tile-title>Carrera</v-list-tile-title>
@@ -175,10 +175,10 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.idSeccion }}</td>
-        <td class="text-xs-center">{{ props.item.nombreSeccion }}</td>
-				<td class="text-xs-center">{{ props.item.carrera.nombreCarrera }}</td>
-				<td class="text-xs-center">{{ props.item.jornada.nombreJornada  }}</td>
+        <td class="text-xs-center">{{ props.item.id }}</td>
+        <td class="text-xs-center">{{ props.item.nombre }}</td>
+				<td class="text-xs-center">{{ props.item.carrera.nombre }}</td>
+				<td class="text-xs-center">{{ props.item.jornada.nombre }}</td>
         <td class="justify-center layout px-0">
         <v-tooltip top>
           <v-btn icon slot="activator" class="mx-0" @click="modalDetalle(props.item)" >
@@ -246,14 +246,14 @@ export default {
 		headers: [ // Encabezados de  la tabla
 			{
 				text: 'ID',
-				value: 'idSeccion',
+				value: 'id',
 				sortable: true,
 				width: '25%',
 				align: 'center'
 			},
-			{ text: 'Nombre', value: 'nombreSeccion', width: '25%', align: 'center' },
+			{ text: 'Nombre', value: 'nombre', width: '25%', align: 'center' },
 			{ text: 'Carrera', value: 'idCarrera', width: '25%', align: 'center' },
-			{ text: 'Jornada', value: 'nombreJornada', width: '25%', align: 'center' },
+			{ text: 'Jornada', value: 'idJornada', width: '25%', align: 'center' },
 			{ text: 'Opciones', sortable: false, width: '25%', align: 'center' }
 		],
 		textoRules: validaciones.textoRules,
@@ -261,21 +261,24 @@ export default {
 		valid: true,
 		addItem: {
 			id: 0,
-			nombreSeccion: ''
+			nombre: '',
+			carrera : {id},
+			jornada : {id}
 		},
 		editedItem: { // prop temporal que guarda el objeto a editar o eliminar
 			id: 0,
-			nombreSeccion: ''
-
+			nombre: '',
+			carrera : {id},
+			jornada : {id}
 		},
 		detailItem: {
 			id: 0,
-			nombreSeccion: ''
+			nombre: ''
 
 		},
 		deleteItem: {
 			id: 0,
-			nombreSeccion: ''
+			nombre: ''
 
 
 		},
@@ -320,7 +323,8 @@ export default {
 			this.selectValidado2 = true
 		},
 		cargarSelectCat () {
-			axios.get(config.API_LOCATION + `/skynet/carrera/`) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+				const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			axios.get(config.API_LOCATION + `/skynet/carrera/`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
 				.then((response) => {
 					this.carrera = response.data
 				})
@@ -328,7 +332,8 @@ export default {
 				})
 		},
 		cargarSelectCat2 () {
-			axios.get(config.API_LOCATION + `/skynet/jornada/`) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+				const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			axios.get(config.API_LOCATION + `/skynet/jornada/`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
 				.then((response) => {
 					this.jornada = response.data
 				})
@@ -336,7 +341,8 @@ export default {
 				})
 		},
 		initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
-			axios.get(config.API_LOCATION + `/skynet/seccion/`) // petición GET a Seccion para traer todos los objetos jornada
+				const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			axios.get(config.API_LOCATION + `/skynet/seccion/`, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
 				.then((response) => {
 					//console.log(response.data)
 					this.items = response.data
@@ -345,16 +351,17 @@ export default {
 				})
 		},
 		agregarSeccion (e) { // función para agregar un nuevo Seccion
-			var nombre = this.addItem.nombreSeccion
+				const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			var nombre = this.addItem.nombre
 			var carrera = this.addItem.carrera
 			var jornada = this.addItem.jornada
 			if (this.$refs.fAgregarSeccion.validate()) {
 				//console.log(nombre + '**** ' + carrera + '**** ' + jornada)
 				axios.post(config.API_LOCATION + '/skynet/seccion/', { // petición POST a Seccion para agregar
-					nombreSeccion: '' + nombre + '',
-					carrera : {idCarrera: carrera},
-					jornada : {idJornada: jornada}
-				})
+					nombre: '' + nombre + '',
+					carrera : {id: carrera},
+					jornada : {id: jornada}
+				}, { headers: { Authorization: AuthStr } })
 					.then((response) => {
 						this.initialize()
 						this.dialogAdd = false // cerrar el modal
@@ -368,6 +375,7 @@ export default {
 			}
 		},
 		editJornada () { // función para editar la Seccion
+				const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
 			var id = this.editedItem.idJornada // obtener id del objeto que se desea editar formulario
 			var nombre = this.editedItem.nombreJornada // obtener nombre del objeto que se desea editar formulario
 			var detalle = this.editedItem.detalleJornada
@@ -375,7 +383,7 @@ export default {
 				axios.put(config.API_LOCATION + '/skynet/jornada/' + id + '', {// petición put para editar el tipo
 					nombreJornada: '' + nombre + '',
 					detalleJornada: '' + detalle + ''
-				})
+				}, { headers: { Authorization: AuthStr } })
 					.then(response => {
 						this.initialize()
 						this.text = 'Se ha modificado correctamente'
@@ -388,7 +396,8 @@ export default {
 			}
 		},
 		eliminarSeccion (e) {
-		axios.delete(config.API_LOCATION + '/skynet/seccion/' + this.deleteItem.idSeccion + '') // petición GET a Tipo para traer a todos los objetos "tipo"
+				const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+		axios.delete(config.API_LOCATION + '/skynet/seccion/' + this.deleteItem.id + '', { headers: { Authorization: AuthStr } }) // petición GET a Tipo para traer a todos los objetos "tipo"
 			.then((response) => {
 				this.initialize()
 				this.dialogDelete = false
