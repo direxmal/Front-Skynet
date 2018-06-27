@@ -261,15 +261,11 @@ export default {
 		valid: true,
 		addItem: {
 			id: 0,
-			nombre: '',
-			carrera : {id},
-			jornada : {id}
+			nombre: ''
 		},
 		editedItem: { // prop temporal que guarda el objeto a editar o eliminar
 			id: 0,
-			nombre: '',
-			carrera : {id},
-			jornada : {id}
+			nombre: ''
 		},
 		detailItem: {
 			id: 0,
