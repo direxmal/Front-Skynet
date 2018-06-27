@@ -22,10 +22,10 @@
 						<v-container grid-list-md>
 							<v-layout wrap>
 								<v-flex xs12 sm12 md12>
-									<v-text-field label="Nombre"  :counter="40" name="nombre" :rules="textoRules2" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
+									<v-text-field label="Nombre"  :counter="40" :rules="textoRules2" name="nombre" :rules="textoRules2" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
 								</v-flex>
 								<v-flex xs12 sm12 md12>
-									<v-text-field label="Detalle"  :counter="40" name="detalle" :rules="textoRules2" ref="txtDetalle" v-model="addItem.detalle"  required></v-text-field>
+									<v-text-field label="Detalle"  :counter="40" :rules="textoRules2" name="detalle" :rules="textoRules2" ref="txtDetalle" v-model="addItem.detalle"  required></v-text-field>
 								</v-flex>
 							</v-layout>
 						</v-container>
@@ -225,7 +225,7 @@ export default {
 		value: '',
 		search: '',
 		snackbar: false,
-		color: 'green',
+		color: 'red darken-3',
 		mode: '',
 		timeout: 3000,
 		text: 'Se ha agregado con exito',
