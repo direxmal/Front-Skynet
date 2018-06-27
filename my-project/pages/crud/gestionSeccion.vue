@@ -94,7 +94,7 @@
 	 				 <v-list-tile-title>{{ deleteItem }}</v-list-tile-title>
 	 			 </v-list-tile>
 				 <v-list-tile class="hoverMouse">
-	 				 <v-list-tile-title>Nombre</v-list-tile-title>
+	 				 <v-list-tile-title>Jornada</v-list-tile-title>
 	 				 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
 	 				 <v-list-tile-title>{{ deleteItem }}</v-list-tile-title>
 	 			 </v-list-tile>
@@ -113,9 +113,72 @@
 	 </v-dialog>
 	 <!-- Fin Dialog Eliminar Seccion-->
 
+	 <!-- Dialog Editar seccion -->
+	 <v-dialog v-model="dialogEdit" max-width="500px">
+	 <v-form @submit.prevent="editSubCat" ref="fEditarSubCat">
+ <v-card>
+	 <v-card-title>
+		 <span class="headline">Editar Subcategoria</span>
+	 </v-card-title>
+	 <v-card-text>
+		 <v-container grid-list-md>
+			 <v-layout wrap>
+				 <v-flex xs12 sm6 md4 style="display:none;">
+					 <v-text-field label="Nombre" v-model="editedItem.id" name="idEdit"></v-text-field>
+				 </v-flex>
+				 <v-flex xs12 sm12 md12>
+					 <v-text-field label="Nombre" :counter="20" :rules="textoRules" v-model="editedItem.nombre" name="nombreEdit"></v-text-field>
+				 </v-flex>
+					<v-flex xs3>
+						<v-subheader>Carrera : </v-subheader>
+				 </v-flex>
+				 <v-flex xs9>
+		 		 	<v-select
+					:items="carrera"
+					item-text="nombre"
+					item-value="id"
+					v-model="editedItem.carrera"
+					search-input
+					v-on:change="onChangeSelect"
+					:rules="[v => this.selectValidado || 'Campo Vacío']"
+					required
+					autocomplete
+					label="Carrera"
+					single-line
+		 			></v-select>
+	 			</v-flex>
+				<v-flex xs3>
+					<v-subheader>Jornada: </v-subheader>
+			 </v-flex>
+			 <v-flex xs9>
+				<v-select
+				:items="jornada"
+				item-text="nombre"
+				item-value="id"
+				v-model="editedItem.jornada"
+				search-input
+				v-on:change="onChangeSelect2"
+				:rules="[v => this.selectValidado2 || 'Campo Vacío']"
+				required
+				autocomplete
+				label="Jornada"
+				single-line
+				></v-select>
+			</v-flex>
+			 		</v-layout>
+		 		</v-container>
+	 		</v-card-text>
+	 		<v-card-actions>
+		 		<v-spacer></v-spacer>
+		 		<v-btn color="blue darken-1" flat @click.native="clearEditModal">Cancelar</v-btn>
+		 		<v-btn color="blue darken-1" type="submit" flat>Guardar</v-btn>
+		 	</v-card-actions>
+ 		</v-card>
+		</v-form>
+		</v-dialog>
+	     <!-- Fin Dialog Editar seccion -->
 
-
-	 <!-- Dialog Detalle jornada -->
+	 <!-- Dialog Detalle seccion-->
 		 <v-dialog v-model="dialogDetail" max-width="500px">
 		 <form @submit.prevent="">
 	 <v-card>
@@ -151,7 +214,7 @@
 	 </v-card>
 		</form>
 	</v-dialog>
- <!-- Fin Dialog Detalle jornada -->
+ <!-- Fin Dialog Detalle seccion -->
 
 	<!-- Tabla -->
     <v-card>
@@ -265,7 +328,9 @@ export default {
 		},
 		editedItem: { // prop temporal que guarda el objeto a editar o eliminar
 			id: 0,
-			nombre: ''
+			nombre: '',
+      id_carrera: {id: 0},
+			id_jornada: {id: 0}
 		},
 		detailItem: {
 			id: 0,
@@ -274,9 +339,9 @@ export default {
 		},
 		deleteItem: {
 			id: 0,
-			nombre: ''
-
-
+			nombre: '',
+			carrera: '',
+			jornada: ''
 		},
 		defaultItem: {
 			name: '',
@@ -297,7 +362,7 @@ export default {
 		},
 		verVal (val) {
 			console.log(val)
-			console.log(this.value)
+
 		}
 	},
 	created () {
@@ -309,7 +374,7 @@ export default {
 		onChangeSelect (val) {
 			this.editedItem.carrera = val.target.value
 		},
-		onChangeSelect (val) {
+		onChangeSelect2 (val) {
 			this.editedItem.jornada = val.target.value
 		},
 		onChangeSelectAgregar (val) {
@@ -370,27 +435,27 @@ export default {
 					)
 			}
 		},
-		editJornada () { // función para editar la Seccion
-				const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-			var id = this.editedItem.idJornada // obtener id del objeto que se desea editar formulario
-			var nombre = this.editedItem.nombreJornada // obtener nombre del objeto que se desea editar formulario
-			var detalle = this.editedItem.detalleJornada
-			if (this.$refs.fEditarJornada.validate()) {
-				axios.put(config.API_LOCATION + '/skynet/jornada/' + id + '', {// petición put para editar el tipo
-					nombreJornada: '' + nombre + '',
-					detalleJornada: '' + detalle + ''
-				}, { headers: { Authorization: AuthStr } })
-					.then(response => {
-						this.initialize()
-						this.text = 'Se ha modificado correctamente'
-						this.snackbar = true
-						this.dialogEdit = false // cerrar modal
-					})
-					.catch(function (error) {
-						console.log(error)
-					})
-			}
-		},
+		editSeccion () { // función para editar la Subcategoría
+			const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+        var id = this.editedItem.id // obtener id del objeto que se desea editar formulario
+        var nombre = this.editedItem.nombre // obtener nombre del objeto que se desea editar formulario
+        var idCarrera = this.editedItem.carrera
+				var idJornada = this.editedItem.jornada
+        if (this.$refs.fEditarSeccion.validate()) {
+          axios.put(config.API_LOCATION + '/skynet/seccion' + id + '', {// petición put para editar el tipo
+            nombre: '' + nombre + '', id_carrera: { id: idCarrera }, id_jornada: { id: idJornada }
+          }, { headers: { Authorization: AuthStr } })
+            .then(response => {
+              this.initialize()
+              this.text = 'Se ha modificado correctamente'
+              this.snackbar = true
+              this.dialogEdit = false // cerrar modal
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+      },
 		eliminarSeccion (e) {
 				const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
 		axios.delete(config.API_LOCATION + '/skynet/seccion/' + this.deleteItem.id + '', { headers: { Authorization: AuthStr } }) // petición GET a Tipo para traer a todos los objetos "tipo"
@@ -407,14 +472,15 @@ export default {
 		this.dialogEdit = true
 	},
 	modalDelete (item) {
-		this.deleteItem = item
-		this.dialogDelete = true
+		this.deleteIndex = this.items.indexOf(item) // obtener posición del array
+		        this.deleteItem = Object.assign({}, item)
+		        this.dialogDelete = true
 	},
 cerrarModalEdit () {
 			this.dialogEdit = false
 		},
 modalDetalle (item) {
-	this.detailItem = this.items.indexOf(item) // obtener posición del array
+//	this.detailItem = this.items.indexOf(item) // obtener posición del array
 	this.detailItem = Object.assign({}, item)
 	this.dialogDetail = true
 },
