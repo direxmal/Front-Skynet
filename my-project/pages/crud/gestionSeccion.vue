@@ -64,9 +64,9 @@
 				</v-card>
 				</v-form>
 			</v-dialog>
-			<!-- Fin Dialog Agregar Jornada -->
+			<!-- Fin Dialog Agregar Seccion -->
 
-	 <!-- Dialog Eliminar Jornada -->
+	 <!-- Dialog Eliminar Seccion -->
 	 <v-dialog v-model="dialogDelete" max-width="500px">
 	  <v-form @submit.prevent="eliminarSeccion" ref="fBorrarSeccion">
 	 <v-card>
@@ -89,7 +89,7 @@
 	 				 <v-list-tile-title>{{ deleteItem.nombre }}</v-list-tile-title>
 	 			 </v-list-tile>
 	 			 <v-list-tile class="hoverMouse">
-	 				 <v-list-tile-title>Nombre</v-list-tile-title>
+	 				 <v-list-tile-title>Carrera</v-list-tile-title>
 	 				 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
 	 				 <v-list-tile-title>{{ deleteItem }}</v-list-tile-title>
 	 			 </v-list-tile>
@@ -111,7 +111,7 @@
 	 </v-card>
 	 </v-form>
 	 </v-dialog>
-	 <!-- Fin Dialog Eliminar Jornada -->
+	 <!-- Fin Dialog Eliminar Seccion-->
 
 
 
@@ -363,7 +363,7 @@ export default {
 						this.dialogAdd = false // cerrar el modal
 						this.text = 'Se ha agregado correctamente'
 						this.snackbar = true
-						this.$refs.fAgregarSección.reset()
+						this.$refs.fAgregarSeccion.reset()
 						this.selectValidado = false
 						this.selectValidado2 = false
 					}
