@@ -22,10 +22,10 @@
 						<v-container grid-list-md>
 							<v-layout wrap>
 								<v-flex xs12 sm12 md12>
-									<v-text-field label="Nombre"  :counter="40" name="nombreCarrera" :rules="textoRules2" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
+									<v-text-field label="Nombre"  :counter="40" name="nombre" :rules="textoRules2" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
 								</v-flex>
 								<v-flex xs12 sm12 md12>
-									<v-text-field label="Detalle"  :counter="40" name="detalleCarrera" :rules="textoRules2" ref="txtDetalle" v-model="addItem.detalle"  required></v-text-field>
+									<v-text-field label="Detalle"  :counter="40" name="detalle" :rules="textoRules2" ref="txtDetalle" v-model="addItem.detalle"  required></v-text-field>
 								</v-flex>
 							</v-layout>
 						</v-container>
@@ -51,17 +51,17 @@
 						 <v-list-tile class="hoverMouse">
 						 <v-list-tile-title>ID</v-list-tile-title>
 						 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-						 <v-list-tile-title>{{ detailItem.idCarrera }}</v-list-tile-title>
+						 <v-list-tile-title>{{ detailItem.id }}</v-list-tile-title>
 					 </v-list-tile>
 					 <v-list-tile class="hoverMouse">
 						 <v-list-tile-title>Nombre</v-list-tile-title>
 						 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-						 <v-list-tile-title>{{ detailItem.nombreCarrera }}</v-list-tile-title>
+						 <v-list-tile-title>{{ detailItem.nombre }}</v-list-tile-title>
 					 </v-list-tile>
 					 <v-list-tile class="hoverMouse">
-						 <v-list-tile-title>Nombre</v-list-tile-title>
+						 <v-list-tile-title>Detalle</v-list-tile-title>
 						 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-						 <v-list-tile-title>{{ detailItem.detalleCarrera }}</v-list-tile-title>
+						 <v-list-tile-title>{{ detailItem.detalle }}</v-list-tile-title>
 					 </v-list-tile>
 				 </v-list>
 			 <v-card-actions>
@@ -84,13 +84,13 @@
 	 			<v-container grid-list-md>
 	 				<v-layout wrap>
 	 					<v-flex xs12 sm6 md4 style="display:none;">
-	 						<v-text-field label="Nombre" v-model="editedItem.idCarrera" name="idEdit"></v-text-field>
+	 						<v-text-field label="Nombre" v-model="editedItem.id" name="idEdit"></v-text-field>
 	 					</v-flex>
 	 					<v-flex xs12 sm12 md12>
-	 						<v-text-field label="Nombre" :counter="40" :rules="textoRules2" v-model="editedItem.nombreCarrera" name="nombreEdit"></v-text-field>
+	 						<v-text-field label="Nombre" :counter="40" :rules="textoRules2" v-model="editedItem.nombre" name="nombreEdit"></v-text-field>
 	 					</v-flex>
 	 					<v-flex xs12 sm12 md12>
-	 						<v-text-field label="Detalle" :counter="40" :rules="textoRules2" v-model="editedItem.detalleCarrera" name="detalleEdit"></v-text-field>
+	 						<v-text-field label="Detalle" :counter="40" :rules="textoRules2" v-model="editedItem.detalle" name="detalleEdit"></v-text-field>
 	 					</v-flex>
 	 				</v-layout>
 	 			</v-container>
@@ -120,17 +120,17 @@
 						<v-list-tile class="hoverMouse">
 						<v-list-tile-title>ID</v-list-tile-title>
 						<v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-						<v-list-tile-title>{{ deleteItem.idCarrera }}</v-list-tile-title>
+						<v-list-tile-title>{{ deleteItem.id }}</v-list-tile-title>
 					</v-list-tile>
 					<v-list-tile class="hoverMouse">
 						<v-list-tile-title>Nombre</v-list-tile-title>
 						<v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-						<v-list-tile-title>{{ deleteItem.nombreCarrera }}</v-list-tile-title>
+						<v-list-tile-title>{{ deleteItem.nombre }}</v-list-tile-title>
 					</v-list-tile>
 					<v-list-tile class="hoverMouse">
-						<v-list-tile-title>Nombre</v-list-tile-title>
+						<v-list-tile-title>Detalle</v-list-tile-title>
 						<v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-						<v-list-tile-title>{{ deleteItem.detalleCarrera }}</v-list-tile-title>
+						<v-list-tile-title>{{ deleteItem.detalle }}</v-list-tile-title>
 					</v-list-tile>
 				</v-list>
 			</v-flex>
@@ -170,9 +170,9 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.idCarrera }}</td>
-        <td class="text-xs-center">{{ props.item.nombreCarrera }}</td>
-				<td class="text-xs-center">{{ props.item.detalleCarrera }}</td>
+        <td class="text-xs-center">{{ props.item.id }}</td>
+        <td class="text-xs-center">{{ props.item.nombre }}</td>
+				<td class="text-xs-center">{{ props.item.detalle }}</td>
         <td class="justify-center layout px-0">
         <v-tooltip top>
           <v-btn icon slot="activator" class="mx-0" @click="modalDetalle(props.item)" >
@@ -232,13 +232,13 @@ export default {
 		headers: [ // Encabezados de  la tabla
 			{
 				text: 'ID',
-				value: 'idCarrera',
+				value: 'id',
 				sortable: true,
 				width: '25%',
 				align: 'center'
 			},
-			{ text: 'Nombre', value: 'nombreCarrera', width: '25%', align: 'center' },
-			{ text: 'Detalle', value: 'detalleCarrera', width: '25%', align: 'center' },
+			{ text: 'Nombre', value: 'nombre', width: '25%', align: 'center' },
+			{ text: 'Detalle', value: 'detalle', width: '25%', align: 'center' },
 			{ text: 'Opciones', sortable: false, width: '25%', align: 'center' }
 		],
 		textoRules: validaciones.textoRules,
@@ -247,23 +247,23 @@ export default {
 		valid: true,
 		addItem: {
 			id: 0,
-			detalleCarrera: '',
-			nombreCarrera: ''
+			detalle: '',
+			nombre: ''
 		},
 		editedItem: { // prop temporal que guarda el objeto a editar o eliminar
 			id: 0,
-			detalleCarrera: '',
-			nombreCarrera: ''
+			detalle: '',
+			nombre: ''
 		},
 		detailItem: {
 			id: 0,
-			detalleCarrera: '',
-			nombreCarrera: ''
+			detalle: '',
+			nombre: ''
 		},
 		deleteItem: {
 			id: 0,
-			detalleCarrera: '',
-			nombreCarrera: ''
+			detalle: '',
+			nombre: ''
 
 		},
 		defaultItem: {
@@ -293,7 +293,8 @@ export default {
 	},
 	methods: {
 		initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
-			axios.get(config.API_LOCATION + `/skynet/carrera/`) // petición GET a Subcategoría para traer todos los objetos jornada
+					const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			axios.get(config.API_LOCATION + `/skynet/carrera/`, { headers: { Authorization: AuthStr } }) // petición GET a Subcategoría para traer todos los objetos jornada
 				.then((response) => {
 					//console.log(response.data)
 					this.items = response.data
@@ -302,14 +303,15 @@ export default {
 				})
 		},
 		agregarCarrera (e) { // función para agregar un nuevo Subcategoría
+					const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
 			var nombre = this.addItem.nombre
 			var detalle = this.addItem.detalle
 			if (this.$refs.fAgregarCarrera.validate()) {
 				console.log(nombre + '**** ' + detalle)
 				axios.post(config.API_LOCATION + '/skynet/carrera/', { // petición POST a Subcategoría para agregar
-				nombreCarrera: '' + nombre + '',
-				detalleCarrera: '' + detalle + ''
-				})
+				nombre: '' + nombre + '',
+				detalle: '' + detalle + ''
+			}, { headers: { Authorization: AuthStr } })
 					.then((response) => {
 						this.initialize()
 						this.dialogAdd = false // cerrar el modal
@@ -322,14 +324,15 @@ export default {
 			}
 		},
 		editCarrera () { // función para editar la Subcategoría
-			var id = this.editedItem.idCarrera // obtener id del objeto que se desea editar formulario
-			var nombre = this.editedItem.nombreCarrera // obtener nombre del objeto que se desea editar formulario
-			var detalle = this.editedItem.detalleCarrera
+					const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			var id = this.editedItem.id // obtener id del objeto que se desea editar formulario
+			var nombre = this.editedItem.nombre // obtener nombre del objeto que se desea editar formulario
+			var detalle = this.editedItem.detalle
 			if (this.$refs.fEditarCarrera.validate()) {
 				axios.put(config.API_LOCATION + '/skynet/carrera/' + id + '', {// petición put para editar el tipo
-					nombreCarrera: '' + nombre + '',
-					detalleCarrera: '' + detalle + ''
-				})
+					nombre: '' + nombre + '',
+					detalle: '' + detalle + ''
+				}, { headers: { Authorization: AuthStr } })
 					.then(response => {
 						this.initialize()
 						this.text = 'Se ha modificado correctamente'
@@ -342,7 +345,8 @@ export default {
 			}
 		},
 		eliminarCarrera (e) {
-		axios.delete(config.API_LOCATION + '/skynet/carrera/' + this.deleteItem.idCarrera + '') // petición GET a Tipo para traer a todos los objetos "tipo"
+					const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+		axios.delete(config.API_LOCATION + '/skynet/carrera/' + this.deleteItem.id + '', { headers: { Authorization: AuthStr } }) // petición GET a Tipo para traer a todos los objetos "tipo"
 			.then((response) => {
 				this.initialize()
 				this.dialogDelete = false
