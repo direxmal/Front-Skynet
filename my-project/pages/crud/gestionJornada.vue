@@ -25,10 +25,10 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm12 md12>
-                <v-text-field label="Nombre"  :counter="20" name="nombre" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
+                <v-text-field label="Nombre"  :counter="20" :rules="textoRules" name="nombre" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
               </v-flex>
 							<v-flex xs12 sm12 md12>
-                <v-text-field label="Detalle"  :counter="20" name="detalle" ref="txtDetalle" v-model="addItem.detalle"  required></v-text-field>
+                <v-text-field label="Detalle"  :counter="20" :rules="textoRules" name="detalle" ref="txtDetalle" v-model="addItem.detalle"  required></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
