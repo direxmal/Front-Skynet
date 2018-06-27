@@ -94,7 +94,7 @@ import Cookie from 'js-cookie'
           .then((response) => {
             console.log("tomado")
             console.log(response)
-            alert('BIENVENIDO')
+          //alert('BIENVENIDO')
             //this.setJwtToken(response.data.token)
             const auth = {
               accessToken: response.data.token
