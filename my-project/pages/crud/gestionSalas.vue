@@ -24,10 +24,7 @@
  	           <v-container grid-list-md>
  	             <v-layout wrap>
  	               <v-flex xs12 sm12 md12>
- 	                 <v-text-field label="Nombre"  :counter="20" name="nombreSala" ref="txtNombre" v-model="addItem.nombreSala" required></v-text-field>
- 	               </v-flex>
- 	 							<v-flex xs12 sm12 md12>
- 	                 <v-text-field label="Número"  :counter="20" name="numeroSala" ref="txtNumero" v-model="addItem.numeroSala"  required></v-text-field>
+ 	                 <v-text-field label="Nombre"  :counter="20" name="nombre" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
  	               </v-flex>
 								 <v-flex xs12 sm12 md12>
 										<v-text-field label="Piso"  :counter="20" name="piso" ref="txtPiso" v-model="addItem.piso"  required></v-text-field>
@@ -60,17 +57,12 @@
  	              <v-list-tile class="hoverMouse">
  	              <v-list-tile-title>ID</v-list-tile-title>
  	              <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
- 	              <v-list-tile-title>{{ deleteItem.idSala }}</v-list-tile-title>
+ 	              <v-list-tile-title>{{ deleteItem.id }}</v-list-tile-title>
  	            </v-list-tile>
  	            <v-list-tile class="hoverMouse">
  	              <v-list-tile-title>Nombre</v-list-tile-title>
  	              <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
- 	              <v-list-tile-title>{{ deleteItem.nombreSala }}</v-list-tile-title>
- 	            </v-list-tile>
- 	            <v-list-tile class="hoverMouse">
- 	              <v-list-tile-title>Número</v-list-tile-title>
- 	              <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
- 	              <v-list-tile-title>{{ deleteItem.numeroSala }}</v-list-tile-title>
+ 	              <v-list-tile-title>{{ deleteItem.nombre }}</v-list-tile-title>
  	            </v-list-tile>
 							<v-list-tile class="hoverMouse">
  	              <v-list-tile-title>Piso</v-list-tile-title>
@@ -103,13 +95,10 @@
  	        <v-container grid-list-md>
  	          <v-layout wrap>
  	            <v-flex xs12 sm6 md4 style="display:none;">
- 	              <v-text-field label="Nombre" v-model="editedItem.idSala" name="idEdit"></v-text-field>
+ 	              <v-text-field label="Nombre" v-model="editedItem.id" name="idEdit"></v-text-field>
  	            </v-flex>
  	            <v-flex xs12 sm12 md12>
- 	              <v-text-field label="Nombre" :counter="20" :rules="textoRules" v-model="editedItem.nombreSala" name="nombreEdit"></v-text-field>
- 	            </v-flex>
- 	            <v-flex xs12 sm12 md12>
- 	              <v-text-field label="Número" :counter="20"  v-model="editedItem.numeroSala" name="numeroEdit"></v-text-field>
+ 	              <v-text-field label="Nombre" :counter="20" :rules="textoRules" v-model="editedItem.nombre" name="nombreEdit"></v-text-field>
  	            </v-flex>
 							<v-flex xs12 sm12 md12>
 								<v-text-field label="Piso" :counter="20" :rules="textoRules" v-model="editedItem.piso" name="pisoEdit"></v-text-field>
@@ -136,17 +125,12 @@
 		 				<v-list-tile class="hoverMouse">
 		 				<v-list-tile-title>ID</v-list-tile-title>
 		 				<v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-		 				<v-list-tile-title>{{ detailItem.idSala }}</v-list-tile-title>
+		 				<v-list-tile-title>{{ detailItem.id }}</v-list-tile-title>
 		 			</v-list-tile>
 		 			<v-list-tile class="hoverMouse">
 		 				<v-list-tile-title>Nombre</v-list-tile-title>
 		 				<v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-		 				<v-list-tile-title>{{ detailItem.nombreSala }}</v-list-tile-title>
-		 			</v-list-tile>
-		 			<v-list-tile class="hoverMouse">
-		 				<v-list-tile-title>Número</v-list-tile-title>
-		 				<v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-		 				<v-list-tile-title>{{ detailItem.numeroSala }}</v-list-tile-title>
+		 				<v-list-tile-title>{{ detailItem.nombre }}</v-list-tile-title>
 		 			</v-list-tile>
 					<v-list-tile class="hoverMouse">
 		 				<v-list-tile-title>Piso</v-list-tile-title>
@@ -184,9 +168,8 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.idSala }}</td>
-        <td class="text-xs-center">{{ props.item.nombreSala }}</td>
-				<td class="text-xs-center">{{ props.item.numeroSala }}</td>
+        <td class="text-xs-center">{{ props.item.id }}</td>
+        <td class="text-xs-center">{{ props.item.nombre }}</td>
 				<td class="text-xs-center">{{ props.item.piso }}</td>
         <td class="justify-center layout px-0">
         <v-tooltip top>
@@ -247,13 +230,12 @@ export default {
 		headers: [ // Encabezados de  la tabla
 			{
 				text: 'ID',
-				value: 'idSala',
+				value: 'id',
 				sortable: true,
 				width: '25%',
 				align: 'center'
 			},
-			{ text: 'Nombre', value: 'nombreSala', width: '25%', align: 'center' },
-			{ text: 'Número', value: 'numeroSala', width: '25%', align: 'center' },
+			{ text: 'Nombre', value: 'nombre', width: '25%', align: 'center' },
 			{ text: 'Piso', value: 'piso', width: '25%', align: 'center' },
 			{ text: 'Opciones', sortable: false, width: '25%', align: 'center' }
 		],
@@ -262,25 +244,23 @@ export default {
 		valid: true,
 		addItem: {
 			id: 0,
-			numeroSala: '',
 			piso: '',
-			nombreSala: ''
+			nombre: ''
 		},
 		editedItem: { // prop temporal que guarda el objeto a editar o eliminar
 			id: 0,
-			numeroSala: '',
 			piso: '',
-			nombreSala: ''
+			nombre: ''
 		},
 		detailItem: {
 			id: 0,
-			detallesala: '',
-			nombresala: ''
+			piso: '',
+			nombre: ''
 		},
 		deleteItem: {
 			id: 0,
-			detallesala: '',
-			nombresala: ''
+			piso: '',
+			nombre: ''
 
 		},
 		defaultItem: {
@@ -310,7 +290,8 @@ export default {
 	},
 	methods: {
 		initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
-			axios.get(config.API_LOCATION + `/skynet/sala/`) // petición GET a Subcategoría para traer todos los objetos sala
+			const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			axios.get(config.API_LOCATION + `/skynet/sala/`, { headers: { Authorization: AuthStr } }) // petición GET a Subcategoría para traer todos los objetos sala
 				.then((response) => {
 					//console.log(response.data)
 					this.items = response.data
@@ -319,16 +300,15 @@ export default {
 				})
 		},
 		agregarSala (e) { // función para agregar un nuevo Subcategoría
-			var nombre = this.addItem.nombreSala
-			var numero = this.addItem.numeroSala
+			const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			var nombre = this.addItem.nombre
 			var piso = this.addItem.piso
 			if (this.$refs.fAgregarSala.validate()) {
 				//console.log(nombre + '**** ' + detalle)
 				axios.post(config.API_LOCATION + '/skynet/sala/', { // petición POST a Subcategoría para agregar
-				nombreSala: '' + nombre + '',
-				numeroSala: '' + numero + '',
+				nombre: '' + nombre + '',
 				piso: '' + piso + ''
-				})
+			}, { headers: { Authorization: AuthStr } })
 					.then((response) => {
 						this.initialize()
 						this.dialogAdd = false // cerrar el modal
@@ -341,16 +321,15 @@ export default {
 			}
 		},
 		editSala () { // función para editar la Subcategoría
-			var id = this.editedItem.idSala // obtener id del objeto que se desea editar formulario
-			var nombre = this.editedItem.nombreSala // obtener nombre del objeto que se desea editar formulario
-			var numero = this.editedItem.numeroSala
+			const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			var id = this.editedItem.id // obtener id del objeto que se desea editar formulario
+			var nombre = this.editedItem.nombre // obtener nombre del objeto que se desea editar formulario
 			var piso = this.editedItem.piso
 			if (this.$refs.fEditarSala.validate()) {
 				axios.put(config.API_LOCATION + '/skynet/sala/' + id + '', {// petición put para editar el tipo
-					nombreSala: '' + nombre + '',
-					numeroSala: '' + numero + '',
+					nombre: '' + nombre + '',
 					piso: '' + piso + ''
-				})
+				}, { headers: { Authorization: AuthStr } })
 					.then(response => {
 						this.initialize()
 						this.text = 'Se ha modificado correctamente'
@@ -363,7 +342,8 @@ export default {
 			}
 		},
 		eliminarSala (e) {
-		axios.delete(config.API_LOCATION + '/skynet/sala/' + this.deleteItem.idSala + '') // petición GET a Tipo para traer a todos los objetos "tipo"
+			const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+		axios.delete(config.API_LOCATION + '/skynet/sala/' + this.deleteItem.id + '', { headers: { Authorization: AuthStr } }) // petición GET a Tipo para traer a todos los objetos "tipo"
 			.then((response) => {
 				this.initialize()
 				this.dialogDelete = false
