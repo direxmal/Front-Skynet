@@ -12,10 +12,10 @@
 						<v-container grid-list-md>
 							<v-layout wrap>
 								<v-flex xs12 sm12 md12>
-									<v-text-field label="Nombre"  :counter="20" name="nombreDocente" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
+									<v-text-field label="Nombre"  :counter="20" name="nombre" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
 								</v-flex>
 							 <v-flex xs12 sm12 md12>
-									<v-text-field label="Apellido"  :counter="20" name="apellidoDocente" ref="txtApellido" v-model="addItem.apellido"  required></v-text-field>
+									<v-text-field label="Apellido"  :counter="20" name="apellido" ref="txtApellido" v-model="addItem.apellido"  required></v-text-field>
 								</v-flex>
 							</v-layout>
 						</v-container>
@@ -41,17 +41,17 @@
 						 <v-list-tile class="hoverMouse">
 						 <v-list-tile-title>ID</v-list-tile-title>
 						 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-						 <v-list-tile-title>{{ detailItem.idDocente }}</v-list-tile-title>
+						 <v-list-tile-title>{{ detailItem.id }}</v-list-tile-title>
 					 </v-list-tile>
 					 <v-list-tile class="hoverMouse">
 						 <v-list-tile-title>Nombre</v-list-tile-title>
 						 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-						 <v-list-tile-title>{{ detailItem.nombreDocente }}</v-list-tile-title>
+						 <v-list-tile-title>{{ detailItem.nombre }}</v-list-tile-title>
 					 </v-list-tile>
 					 <v-list-tile class="hoverMouse">
-						 <v-list-tile-title>Nombre</v-list-tile-title>
+						 <v-list-tile-title>Apellido</v-list-tile-title>
 						 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-						 <v-list-tile-title>{{ detailItem.apellidoDocente }}</v-list-tile-title>
+						 <v-list-tile-title>{{ detailItem.apellido }}</v-list-tile-title>
 					 </v-list-tile>
 				 </v-list>
 			 <v-card-actions>
@@ -74,13 +74,13 @@
 	       <v-container grid-list-md>
 	         <v-layout wrap>
 	           <v-flex xs12 sm6 md4 style="display:none;">
-	             <v-text-field label="Nombre" v-model="editedItem.idDocente" name="idEdit"></v-text-field>
+	             <v-text-field label="Id" v-model="editedItem.id" name="idEdit"></v-text-field>
 	           </v-flex>
 	           <v-flex xs12 sm12 md12>
-	             <v-text-field label="Nombre" :counter="20" :rules="textoRules" v-model="editedItem.nombreDocente" name="nombreEdit"></v-text-field>
+	             <v-text-field label="Nombre" :counter="20" :rules="textoRules" v-model="editedItem.nombre" name="nombreEdit"></v-text-field>
 	           </v-flex>
 	           <v-flex xs12 sm12 md12>
-	             <v-text-field label="Nombre" :counter="20" :rules="textoRules" v-model="editedItem.apellidoDocente" name="detalleEdit"></v-text-field>
+	             <v-text-field label="Apellido" :counter="20" :rules="textoRules" v-model="editedItem.apellido" name="detalleEdit"></v-text-field>
 	           </v-flex>
 	         </v-layout>
 	       </v-container>
@@ -110,17 +110,17 @@
 	 				 <v-list-tile class="hoverMouse">
 	 				 <v-list-tile-title>ID</v-list-tile-title>
 	 				 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-	 				 <v-list-tile-title>{{ deleteItem.idDocente }}</v-list-tile-title>
+	 				 <v-list-tile-title>{{ deleteItem.id }}</v-list-tile-title>
 	 			 </v-list-tile>
 	 			 <v-list-tile class="hoverMouse">
 	 				 <v-list-tile-title>Nombre</v-list-tile-title>
 	 				 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-	 				 <v-list-tile-title>{{ deleteItem.nombreDocente }}</v-list-tile-title>
+	 				 <v-list-tile-title>{{ deleteItem.nombre }}</v-list-tile-title>
 	 			 </v-list-tile>
 	 			 <v-list-tile class="hoverMouse">
-	 				 <v-list-tile-title>Nombre</v-list-tile-title>
+	 				 <v-list-tile-title>Apellido</v-list-tile-title>
 	 				 <v-list-tile-title class="text-lg-center">:</v-list-tile-title>
-	 				 <v-list-tile-title>{{ deleteItem.apellidoDocente }}</v-list-tile-title>
+	 				 <v-list-tile-title>{{ deleteItem.apellido }}</v-list-tile-title>
 	 			 </v-list-tile>
 	 		 </v-list>
 	 	 </v-flex>
@@ -159,9 +159,9 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.idDocente }}</td>
-        <td class="text-xs-center">{{ props.item.nombreDocente }}</td>
-				<td class="text-xs-center">{{ props.item.apellidoDocente }}</td>
+        <td class="text-xs-center">{{ props.item.id }}</td>
+        <td class="text-xs-center">{{ props.item.nombre }}</td>
+				<td class="text-xs-center">{{ props.item.apellido }}</td>
         <td class="justify-center layout px-0">
         <v-tooltip top>
           <v-btn icon slot="activator" class="mx-0" @click="modalDetalle(props.item)" >
@@ -219,13 +219,13 @@ export default {
 		headers: [ // Encabezados de  la tabla
 			{
 				text: 'ID',
-				value: 'idDocente',
+				value: 'id',
 				sortable: true,
 				width: '25%',
 				align: 'center'
 			},
-			{ text: 'Nombre', value: 'nombreDocente', width: '25%', align: 'center' },
-			{ text: 'Apellido', value: 'apellidoDocente', width: '25%', align: 'center' },
+			{ text: 'Nombre', value: 'nombre', width: '25%', align: 'center' },
+			{ text: 'Apellido', value: 'apellido', width: '25%', align: 'center' },
 			{ text: 'Opciones', sortable: false, width: '25%', align: 'center' }
 		],
 		textoRules: validaciones.textoRules,
@@ -233,23 +233,23 @@ export default {
 		valid: true,
 		addItem: {
 			id: 0,
-			apellidoDocente: '',
-			nombreDocente: ''
+			apellido: '',
+			nombre: ''
 		},
 		editedItem: { // prop temporal que guarda el objeto a editar o eliminar
 			id: 0,
-			apellidoDocente: '',
-			nombreDocente: ''
+			apellido: '',
+			nombre: ''
 		},
 		detailItem: {
 			id: 0,
-			apellidoDocente: '',
-			nombreDocente: ''
+			apellido: '',
+			nombre: ''
 		},
 		deleteItem: {
 			id: 0,
-			apellidoDocente: '',
-			nombreDocente: ''
+			apellido: '',
+			nombre: ''
 
 		},
 		defaultItem: {
@@ -279,7 +279,8 @@ export default {
 	},
 	methods: {
 		initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
-			axios.get(config.API_LOCATION + `/skynet/docente/`) // petición GET a Subcategoría para traer todos los objetos jornada
+			const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			axios.get(config.API_LOCATION + `/skynet/docente/`, { headers: { Authorization: AuthStr } }) // petición GET a Subcategoría para traer todos los objetos jornada
 				.then((response) => {
 				//	console.log(response.data)
 					this.items = response.data
@@ -288,14 +289,15 @@ export default {
 				})
 		},
 		agregarDocente (e) { // función para agregar un nuevo Subcategoría
+			const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
 			var nombre = this.addItem.nombre
 			var apellido = this.addItem.apellido
 			if (this.$refs.fAgregarDocente.validate()) {
 				console.log(nombre + '**** ' + apellido)
 				axios.post(config.API_LOCATION + '/skynet/docente/', { // petición POST a Subcategoría para agregar
-				nombreDocente: '' + nombre + '',
-				apellidoDocente: '' + apellido + ''
-				})
+				nombre: '' + nombre + '',
+				apellido: '' + apellido + ''
+			}, { headers: { Authorization: AuthStr } })
 					.then((response) => {
 						this.initialize()
 						this.dialogAdd = false // cerrar el modal
@@ -306,15 +308,16 @@ export default {
 					)
 			}
 		},
-		editDocente () { // función para editar la Subcategoría
-			var id = this.editedItem.idDocente // obtener id del objeto que se desea editar formulario
-			var nombre = this.editedItem.nombreDocente // obtener nombre del objeto que se desea editar formulario
-			var apellido = this.editedItem.apellidoDocente
+		editDocente () { // función para editar la Subcategoría	const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+			var id = this.editedItem.id // obtener id del objeto que se desea editar formulario
+			var nombre = this.editedItem.nombre // obtener nombre del objeto que se desea editar formulario
+			var apellido = this.editedItem.apellido
 			if (this.$refs.fEditarDocente.validate()) {
 				axios.put(config.API_LOCATION + '/skynet/docente/' + id + '', {// petición put para editar el tipo
-					nombreDocente: '' + nombre + '',
-					apellidoDocente: '' + apellido + ''
-				})
+					nombre: '' + nombre + '',
+					apellido: '' + apellido + ''
+				}, { headers: { Authorization: AuthStr } })
 					.then(response => {
 						this.initialize()
 						this.text = 'Se ha modificado correctamente'
@@ -327,7 +330,8 @@ export default {
 			}
 		},
 		eliminarDocente (e) {
-		axios.delete(config.API_LOCATION + '/skynet/docente/' + this.deleteItem.idDocente + '') // petición GET a Tipo para traer a todos los objetos "tipo"
+			const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+		axios.delete(config.API_LOCATION + '/skynet/docente/' + this.deleteItem.id + '', { headers: { Authorization: AuthStr } }) // petición GET a Tipo para traer a todos los objetos "tipo"
 			.then((response) => {
 				this.initialize()
 				this.dialogDelete = false
