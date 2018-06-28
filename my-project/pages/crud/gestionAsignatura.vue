@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <!-- Dialog Agregar Asignatura -->
+    <!-- Dialog Agregar Asignaturaasda -->
       <v-dialog v-model="dialogAdd" max-width="500px">
         <v-btn dark color="red dark-2"  slot="activator" >Agregar Asignatura</v-btn>
               <v-form @submit.prevent="agregarAsignatura" v-model="valid" ref="fAgregarAsignatura" lazy-validation>
