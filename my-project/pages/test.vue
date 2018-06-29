@@ -1,22 +1,59 @@
 <template>
   <v-container grid-list-md text-xs-center>
+    <v-container fluid>
+       <v-layout row wrap>
+         <v-flex xs12 sm6>
+           <v-select
+             :items="sala"
+             item-value="id"
+             item-text="nombre"
+             label="Sala"
+             autocomplete
+           ></v-select>
+         </v-flex>
+       </v-layout>
+     </v-container>
     <v-layout row wrap>
       <v-flex xs2>
         <v-container grid-list-md text-xs-center>
           <v-layout row wrap>
             <v-flex xs12>
-              <v-card dark color="primary">
-                <v-card-text class="px-0">Lliçons</v-card-text>
+              <v-card dark color= red darken-3>
+                <v-card-text class="px-0">Seleccione</v-card-text>
               </v-card>
             </v-flex>
-            <v-flex xs12>
-              <v-card>
-                <v-card-text class="px-0">Available Dropzone</v-card-text>
-              </v-card>
-            </v-flex>
+            <v-container fluid>
+               <v-layout row wrap>
+                 <v-flex xs12>
+                   <v-select
+                     :items="carrera"
+                     item-value="id"
+                     item-text="nombre"
+                     label="Carrera"
+                     :rules="[v => this.selectValidado || 'Campo Vacío']"
+                     required
+                     autocomplete
+                   ></v-select>
+                 </v-flex>
+               </v-layout>
+             </v-container>
+             <v-container fluid>
+                <v-layout row wrap>
+                  <v-flex xs12>
+                    <v-select
+                      :items="seccion"
+                      item-value="id"
+                      item-text="nombre"
+                      label="Sección"
+                      autocomplete
+                    ></v-select>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            <!-- Aqui va lo del cargar-->
             <v-flex xs12 v-for="lesson in availableLessons" :key="lesson.id">
               <v-card draggable="true" @dragstart="startDraggingAvailableLesson($event,lesson)">
-                <v-card-text class="px-0">{{lesson.name}}</v-card-text>
+                <v-card-text class="px-0">{{lesson.nombre}}</v-card-text>
               </v-card>
             </v-flex>
           </v-layout>
@@ -27,7 +64,7 @@
           <v-layout row wrap>
             <v-flex xs2>
               <v-card dark color="primary">
-                <v-card-text class="px-0" >Hora</v-card-text>
+                <v-card-text class="px-0">Hora</v-card-text>
               </v-card>
             </v-flex>
             <v-flex xs2 v-for="day in days" :key="day.id">
@@ -51,24 +88,6 @@
         </v-container>
       </v-flex>
     </v-layout>
-    <v-form>
-      <v-text-field
-              label="Name"
-              v-model="newLessonName"
-              required
-      ></v-text-field>
-      <v-text-field
-              label="Day Code"
-              v-model="newLessonDay"
-              required
-      ></v-text-field>
-      <v-text-field
-              label="Timeslot Code"
-              v-model="newLessonTimeslot"
-              required
-      ></v-text-field>
-    </v-form>
-    <v-btn color="success" @click="addLesson">Add lesson</v-btn>
   </v-container>
 </template>
 
@@ -86,11 +105,17 @@
 </style>
 
 <script>
+import axios from 'axios' // Modulo para realizar las peticiones
+import config from '../config.vue' //conexion
   export default {
     data () {
       return {
         timetable: [],
-        newLessonName: '',
+        sala: [],
+        carrera: [],
+        seccion: [],
+        newLessonNombre: '',
+        value: '',
         newLessonDay: 0,
         newLessonTimeslot: 0,
         days: [
@@ -118,88 +143,127 @@
         timeslots: [
           {
             'id': 1,
-            'start': '08:00',
-            'end': '09:00'
+            'start': '08:30',
+            'end': '09:15'
           },
           {
             'id': 2,
-            'start': '09:00',
+            'start': '09:15',
             'end': '10:00'
           },
           {
             'id': 3,
             'start': '10:00',
-            'end': '11:00'
+            'end': '10:45'
           },
           {
             'id': 4,
-            'start': '11:00',
+            'start': '10:45',
             'end': '11:30'
           },
           {
             'id': 5,
             'start': '11:30',
-            'end': '12:30'
+            'end': '12:15'
           },
           {
             'id': 6,
-            'start': '12:30',
-            'end': '13:30'
+            'start': '12:15',
+            'end': '13:00'
           },
           {
             'id': 7,
-            'start': '13:30',
-            'end': '14:30'
-          }
-        ],
-        lessons: [
-          {
-            'id': 1,
-            'name': 'UF1',
-            'day': 1,
-            'timeslot_id': 7
-          }
-        ],
-        availableLessons: [
-          {
-            'id': 1,
-            'name': 'UF1'
-          },
-          {
-            'id': 2,
-            'name': 'UF1'
-          },
-          {
-            'id': 3,
-            'name': 'UF1'
-          },
-          {
-            'id': 4,
-            'name': 'UF1'
-          },
-          {
-            'id': 5,
-            'name': 'UF1'
-          },
-          {
-            'id': 6,
-            'name': 'UF2'
-          },
-          {
-            'id': 7,
-            'name': 'UF2'
+            'start': '13:00',
+            'end': '13:45'
           },
           {
             'id': 8,
-            'name': 'UF3'
+            'start': '13:45',
+            'end': '13:30'
+          },
+          {
+            'id': 9,
+            'start': '13:30',
+            'end': '14:15'
+          },
+          {
+            'id': 10,
+            'start': '14:15',
+            'end': '15:00'
+          },
+          {
+            'id': 11,
+            'start': '15:00',
+            'end': '15:45'
+          },
+          {
+            'id': 12,
+            'start': '15:45',
+            'end': '16:30'
+          },
+          {
+            'id': 13,
+            'start': '16:30',
+            'end': '17:15'
+          },
+          {
+            'id': 14,
+            'start': '17:15',
+            'end': '18:00'
           }
-        ]
+        ],
+        lessons: [],
+        availableLessons: []
       }
     },
+    created () {
+      this.cargarSelectSala()
+      this.cargarSelectCarrera()
+      this.cargarSelectSeccion()
+      this.cargarAsignatura()
+    },
     methods: {
+      cargarSelectSala () {
+        const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+        axios.get(config.API_LOCATION + `/skynet/sala/piso3`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+          .then((response) => {
+            this.sala = response.data
+          })
+          .catch(e => {
+          })
+      },
+      cargarSelectCarrera () {
+        const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+        axios.get(config.API_LOCATION + `/skynet/carrera/`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+          .then((response) => {
+            this.carrera = response.data
+          })
+          .catch(e => {
+          })
+      },
+      cargarSelectSeccion() {
+        const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+        axios.get(config.API_LOCATION + `/skynet/horario/carrera/{id}` + 1 ,{headers: { Authorization: AuthStr}  }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+          .then((response) => {
+            this.seccion = response.data
+          })
+          .catch(e => {
+          })
+      },
+      cargarAsignatura() {
+        //console.log('WENAA loquete')
+        const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+        axios.get(config.API_LOCATION + `/skynet/asignatura/`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+          .then((response) => {
+            //console.log('WENAAAAA!!')
+            this.availableLessons = response.data
+          })
+          .catch(e => {
+          })
+      },
       addLesson () {
         const newLesson = {
-          'name': this.newLessonName,
+          'nombre': this.newLessonNombre,
           'day': parseInt(this.newLessonDay),
           'timeslot_id': parseInt(this.newLessonTimeslot)
         }
@@ -215,7 +279,7 @@
         const lesson = this.lessons.find(function (lesson) {
           return lesson.day === day.id && lesson.timeslot_id === timeslot.id
         })
-        return lesson ? lesson.name : '&nbsp;'
+        return lesson ? lesson.nombre : '&nbsp;'
       },
       allowDrop (e) {
         e.preventDefault()
@@ -235,7 +299,7 @@
 //        console.log('TIMESLOT:')
 //        console.log(timeslot)
 //        console.log(timeslot.id)
-        this.newLessonName = lesson.name
+        this.newLessonNombre = lesson.nombre
         this.newLessonDay = day.id
         this.newLessonTimeslot = timeslot.id
         this.addLesson()
