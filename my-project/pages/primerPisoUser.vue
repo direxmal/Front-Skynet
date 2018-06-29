@@ -1,73 +1,246 @@
 <template>
-<div>
-  <h1>PRIMER PISO</h1>
-  <v-container fluid>
-     <v-layout row wrap>
-       <v-flex xs12 sm6>
-         <v-select
-           :items="sala"
-           :filter="customFilter"
-           item-value="idSala"
-           item-text="nombreSala"
-           label="Sala"
-           autocomplete
-         ></v-select>
-       </v-flex>
-     </v-layout>
-   </v-container>
-   <!--La tabla de la tabla -->
-   <v-data-table
-   :headers="headers"
-   :items="desserts"
-   hide-actions
-   class="elevation-1"
- >
-   <template slot="items" slot-scope="props">
-     <td>
-         <span>Detalle</span>
-     </td>
-     <td class="text-xs-right">{{ props.item.calories }}</td>
-     <td class="text-xs-right">{{ props.item.fat }}</td>
-     <td class="text-xs-right">{{ props.item.carbs }}</td>
-     <td class="text-xs-right">{{ props.item.protein }}</td>
-     <td class="text-xs-right">{{ props.item.iron }}</td>
-   </template>
- </v-data-table>
-</div>
+  <v-container grid-list-md text-xs-center>
+    <v-container fluid>
+       <v-layout row wrap>
+         <v-flex xs12 sm6>
+           <v-select
+             :items="sala"
+             item-value="id"
+             item-text="nombre"
+             label="Sala"
+             autocomplete
+           ></v-select>
+         </v-flex>
+       </v-layout>
+     </v-container>
+            <!-- Aqui va lo del cargar-->
 
+      <v-flex xs10>
+        <v-container grid-list-md text-xs-center>
+          <v-layout row wrap>
+            <v-flex xs2>
+              <v-card dark color="primary">
+                <v-card-text class="px-0">Hora</v-card-text>
+              </v-card>
+            </v-flex>
+            <v-flex xs2 v-for="day in days" :key="day.id">
+              <v-card dark color="primary">
+                <v-card-text class="px-0">{{ day.name }}</v-card-text>
+              </v-card>
+            </v-flex>
+            <template v-for="timeslot in timeslots">
+              <v-flex xs2>
+                <v-card>
+                  <v-card-text class="px-0">{{ timeslot.start }}</v-card-text>
+                </v-card>
+              </v-flex>
+              <v-flex xs2 v-for="day in days" :key="day.id + '' + timeslot.id ">
+                <v-card>
+                  <v-card-text class="px-0" @drop="dropLesson($event, day, timeslot)" @dragover="allowDrop" v-html="content(day, timeslot )"></v-card-text>
+                </v-card>
+              </v-flex>
+            </template>
+          </v-layout>
+        </v-container>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+  [draggable] {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Required to make elements draggable in old WebKit */
+    -webkit-user-drag: element;
+    cursor: move;
+    cursor: move;
+  }
+</style>
+
 <script>
 import axios from 'axios' // Modulo para realizar las peticiones
 import config from '../config.vue' //conexion
-export default {
-  components: { config },
+  export default {
     layout: 'vistaUsuarioUser',
-      data: () => ({
-          sala: [],
-          desserts: [],
-          customFilter (item, queryText, itemText) {
-         const hasValue = val => val != null ? val : ''
-         const text = hasValue(item.name)
-         const query = hasValue(queryText)
-         return text.toString()
-           .toLowerCase()
-           .indexOf(query.toString().toLowerCase()) > -1
-       },
-       headers: [ // Encabezados de  la tabla
-        { text: 'Hora', sortable: false, align: 'center' },
-   			{ text: 'Lunes', sortable: false, align: 'center' },
-   			{ text: 'Martes', sortable: false, align: 'center' },
-   			{ text: 'Miercoles', sortable: false, align: 'center' },
-        { text: 'Jueves', sortable: false, align: 'center' },
-        { text: 'Viernes', sortable: false, align: 'center' },
-      	{ text: 'Sabado', sortable: false, align: 'center' }
-   		],
-      }),
-      created () {
-
-      },
-      methods: {
-
+    data () {
+      return {
+        timetable: [],
+        sala: [],
+        newLessonNombre: '',
+        value: '',
+        newLessonDay: 0,
+        newLessonTimeslot: 0,
+        days: [
+          {
+            'id': 1,
+            'name': 'Lunes'
+          },
+          {
+            'id': 2,
+            'name': 'Martes'
+          },
+          {
+            'id': 3,
+            'name': 'Miercoles'
+          },
+          {
+            'id': 4,
+            'name': 'Jueves'
+          },
+          {
+            'id': 5,
+            'name': 'Viernes'
+          }
+        ],
+        timeslots: [
+          {
+            'id': 1,
+            'start': '08:30',
+            'end': '09:15'
+          },
+          {
+            'id': 2,
+            'start': '09:15',
+            'end': '10:00'
+          },
+          {
+            'id': 3,
+            'start': '10:00',
+            'end': '10:45'
+          },
+          {
+            'id': 4,
+            'start': '10:45',
+            'end': '11:30'
+          },
+          {
+            'id': 5,
+            'start': '11:30',
+            'end': '12:15'
+          },
+          {
+            'id': 6,
+            'start': '12:15',
+            'end': '13:00'
+          },
+          {
+            'id': 7,
+            'start': '13:00',
+            'end': '13:45'
+          },
+          {
+            'id': 8,
+            'start': '13:45',
+            'end': '13:30'
+          },
+          {
+            'id': 9,
+            'start': '13:30',
+            'end': '14:15'
+          },
+          {
+            'id': 10,
+            'start': '14:15',
+            'end': '15:00'
+          },
+          {
+            'id': 11,
+            'start': '15:00',
+            'end': '15:45'
+          },
+          {
+            'id': 12,
+            'start': '15:45',
+            'end': '16:30'
+          },
+          {
+            'id': 13,
+            'start': '16:30',
+            'end': '17:15'
+          },
+          {
+            'id': 14,
+            'start': '17:15',
+            'end': '18:00'
+          }
+        ],
+        lessons: [],
+        availableLessons: []
       }
-}
+    },
+    created () {
+      this.cargarSelectSala()
+    },
+    methods: {
+      cargarSelectSala () {
+        const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+        axios.get(config.API_LOCATION + `/skynet/sala/piso3`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+          .then((response) => {
+            this.sala = response.data
+          })
+          .catch(e => {
+          })
+      },
+      addLesson () {
+        const newLesson = {
+          'nombre': this.newLessonNombre,
+          'day': parseInt(this.newLessonDay),
+          'timeslot_id': parseInt(this.newLessonTimeslot)
+        }
+//        console.log(newLesson)
+        this.lessons.push(newLesson)
+      },
+      content (day, timeslot) {
+//        console.log('Day:')
+//        console.log(day.name)
+//        console.log('Timeslot:')
+//        console.log(timeslot.start)
+//        console.log(timeslot.id)
+        const lesson = this.lessons.find(function (lesson) {
+          return lesson.day === day.id && lesson.timeslot_id === timeslot.id
+        })
+        return lesson ? lesson.nombre : '&nbsp;'
+      },
+      allowDrop (e) {
+        e.preventDefault()
+      },
+      dropLesson (e, day, timeslot) {
+//        console.log(e)
+        const lesson = JSON.parse(e.dataTransfer.getData('lesson'))
+//        console.log('Lesson is:', lesson)
+//        console.log('Lesson name:', lesson.name)
+//        console.log('Lesson id:', lesson.id)
+//        console.log('Lesson By id:', this.getLessonById(lesson.id))
+        // Remove lesson from available availableLessons:
+        this.availableLessons.splice(this.availableLessons.indexOf(this.getLessonById(lesson.id)), 1)
+//        console.log('DAY:')
+//        console.log(day)
+//        console.log(day.id)
+//        console.log('TIMESLOT:')
+//        console.log(timeslot)
+//        console.log(timeslot.id)
+        this.newLessonNombre = lesson.nombre
+        this.newLessonDay = day.id
+        this.newLessonTimeslot = timeslot.id
+        this.addLesson()
+      },
+      getLessonById (id) {
+        return this.availableLessons.find(function (lesson) {
+          return lesson.id === id
+        })
+      },
+      startDraggingAvailableLesson (e, lesson) {
+//        console.log('Starting drag lesson:')
+//        console.log(lesson.name)
+//        console.log(lesson)
+//        console.log('Event:')
+//        console.log(e)
+        e.dataTransfer.effectAllowed = 'move'
+        e.dataTransfer.setData('lesson', JSON.stringify(lesson))
+      }
+    }
+  }
 </script>

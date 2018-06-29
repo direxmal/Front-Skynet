@@ -13,7 +13,7 @@ export default {
     return {
       items: [
         {
-          src: 'https://image.ibb.co/hPDtQy/1.jpg'
+          src: 'https://image.ibb.co/fbTmEo/IMG_20180628_105037_948.jpg'
         },
         {
           src: 'https://image.ibb.co/bZqCJJ/3.jpg'
