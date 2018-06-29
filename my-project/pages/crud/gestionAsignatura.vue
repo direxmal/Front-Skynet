@@ -417,7 +417,7 @@ export default {
       var nombre = this.addItem.nombre
       var seccion = this.addItem.seccion
       var docente = this.addItem.docente
-      if (this.$refs.fAgregarAsignatura.validate()) {
+      if (this.$refs.fAgregarAsignatura) {
         //console.log(nombre + '**** ' + carrera + '**** ' + jornada)
         axios.post(config.API_LOCATION + '/skynet/asignatura/', { // petición POST a Seccion para agregar
           nombre: '' + nombre + '',

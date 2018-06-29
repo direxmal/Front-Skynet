@@ -11,8 +11,26 @@
              autocomplete
            ></v-select>
          </v-flex>
+        <v-flex>
+          <!-- el primer boton-->
+            <v-tooltip bottom>
+                <v-btn slot="activator" type="submit" outline large fab color="primary" @click.native="agregarHorario" ref="fAgregarHorario" >
+                  <v-icon>add</v-icon>
+                </v-btn>
+              <span>Guardar</span>
+           </v-tooltip>
+             <!-- el segundo boton-->
+           <v-tooltip bottom>
+               <v-btn slot="activator" outline large fab color="primary" @click.native="limpiarTabla">
+                 <v-icon>clear</v-icon>
+               </v-btn>
+             <span>Limpiar</span>
+          </v-tooltip>
+        </v-flex>
        </v-layout>
      </v-container>
+     <div>
+     </div>
     <v-layout row wrap>
       <v-flex xs2>
         <v-container grid-list-md text-xs-center>
@@ -26,13 +44,12 @@
                <v-layout row wrap>
                  <v-flex xs12>
                    <v-select
-                     :items="carrera"
-                     item-value="id"
-                     item-text="nombre"
-                     label="Carrera"
-                     :rules="[v => this.selectValidado || 'Campo Vacío']"
-                     required
-                     autocomplete
+                   :items="carrera"
+                   item-value="id"
+                   required
+                   item-text="nombre"
+                   label="Carrera"
+                   autocomplete
                    ></v-select>
                  </v-flex>
                </v-layout>
@@ -43,6 +60,7 @@
                     <v-select
                       :items="seccion"
                       item-value="id"
+                      required
                       item-text="nombre"
                       label="Sección"
                       autocomplete
@@ -63,24 +81,25 @@
         <v-container grid-list-md text-xs-center>
           <v-layout row wrap>
             <v-flex xs2>
-              <v-card dark color="primary">
+              <v-card dark color= red darken-3>
                 <v-card-text class="px-0">Hora</v-card-text>
               </v-card>
             </v-flex>
             <v-flex xs2 v-for="day in days" :key="day.id">
-              <v-card dark color="primary">
-                <v-card-text class="px-0">{{ day.name }}</v-card-text>
+              <v-card dark color= red darken-3>
+                <v-card-text class="px-0">{{ day.nombre }}</v-card-text>
               </v-card>
             </v-flex>
             <template v-for="timeslot in timeslots">
               <v-flex xs2>
                 <v-card>
-                  <v-card-text class="px-0">{{ timeslot.start }}</v-card-text>
+                  <v-card-text class="px-0">{{ timeslot.start + " - " +timeslot.end }}</v-card-text>
                 </v-card>
               </v-flex>
               <v-flex xs2 v-for="day in days" :key="day.id + '' + timeslot.id ">
                 <v-card>
-                  <v-card-text class="px-0" @drop="dropLesson($event, day, timeslot)" @dragover="allowDrop" v-html="content(day, timeslot )"></v-card-text>
+                  <v-card-text class="px-0" @drop="dropLesson($event, day, timeslot)" @dragover="allowDrop" v-html="content(day, timeslot )"
+                   ></v-card-text>
                 </v-card>
               </v-flex>
             </template>
@@ -114,30 +133,33 @@ import config from '../config.vue' //conexion
         sala: [],
         carrera: [],
         seccion: [],
+        carreraSelectID: {},
+        carrerSelectIDEdit: {},
         newLessonNombre: '',
         value: '',
+        editedIndex: -1,
         newLessonDay: 0,
         newLessonTimeslot: 0,
         days: [
           {
             'id': 1,
-            'name': 'Lunes'
+            'nombre': 'Lunes'
           },
           {
             'id': 2,
-            'name': 'Martes'
+            'nombre': 'Martes'
           },
           {
             'id': 3,
-            'name': 'Miercoles'
+            'nombre': 'Miercoles'
           },
           {
             'id': 4,
-            'name': 'Jueves'
+            'nombre': 'Jueves'
           },
           {
             'id': 5,
-            'name': 'Viernes'
+            'nombre': 'Viernes'
           }
         ],
         timeslots: [
@@ -222,10 +244,52 @@ import config from '../config.vue' //conexion
       this.cargarSelectSeccion()
       this.cargarAsignatura()
     },
+
     methods: {
+      agregarHorario (e) { // función para agregar un nuevo Seccion
+        console.log("puto");
+            const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+            var dia = this.newLessonDay
+            console.log(this.newLessonDay);
+            var rango = this.newLessonTimeslot
+            console.log(this.newLessonTimeslot);
+            var asignatura = this.availableLessons
+            console.log(this.availableLessons);
+            var sala = this.sala
+            console.log(this.sala);
+            if (this.$refs.fAgregarHorario.validate()) {
+              //console.log(nombre + '**** ' + carrera + '**** ' + jornada)
+              axios.post(config.API_LOCATION + '/skynet/horario/', { // petición POST a Seccion para agregar
+                dia : {id: dia},
+                rango : {id: rango},
+                asignatura : {id: asignatura},
+                sala : {id: sala}
+
+              }, { headers: { Authorization: AuthStr } })
+                .then((response) => {
+                  this.initialize()
+                  this.dialogAdd = false // cerrar el modal
+                  this.text = 'Se ha agregado correctamente'
+                  this.snackbar = true
+                  this.$refs.fAgregarHorario.reset()
+                  //this.selectValidado = false
+                  //this.selectValidado2 = false
+                }
+                )
+            }
+          },
+      limpiarTabla (){ //para borrar lo de la tabla, pero falta pasarle los datos
+        var table = this.timetable
+        console.log("wena wacho perro, pulsaste el boton")
+        console.log(this.timetable)
+        table.splice(0,table.length)
+      },
+      onChangeSelect (val) {
+        this.id = val.target.value
+      },
       cargarSelectSala () {
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-        axios.get(config.API_LOCATION + `/skynet/sala/piso3`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+        axios.get(config.API_LOCATION + `/skynet/sala/piso1`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
           .then((response) => {
             this.sala = response.data
           })
@@ -242,8 +306,9 @@ import config from '../config.vue' //conexion
           })
       },
       cargarSelectSeccion() {
+        var id_carrera = this.carrera
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-        axios.get(config.API_LOCATION + `/skynet/horario/carrera/{id}` + 1 ,{headers: { Authorization: AuthStr}  }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+        axios.get(config.API_LOCATION + `/skynet/seccion/`,{headers: { Authorization: AuthStr}  }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
           .then((response) => {
             this.seccion = response.data
           })
@@ -270,9 +335,9 @@ import config from '../config.vue' //conexion
 //        console.log(newLesson)
         this.lessons.push(newLesson)
       },
-      content (day, timeslot) {
-//        console.log('Day:')
-//        console.log(day.name)
+      content (day, timeslot) { //contenido de toda la cuestion
+  //      console.log('Day:')
+  //      console.log(day.name)
 //        console.log('Timeslot:')
 //        console.log(timeslot.start)
 //        console.log(timeslot.id)
@@ -290,11 +355,12 @@ import config from '../config.vue' //conexion
 //        console.log('Lesson is:', lesson)
 //        console.log('Lesson name:', lesson.name)
 //        console.log('Lesson id:', lesson.id)
-//        console.log('Lesson By id:', this.getLessonById(lesson.id))
+        console.log('Lesson By id:', this.getLessonById(lesson.id))
         // Remove lesson from available availableLessons:
-        this.availableLessons.splice(this.availableLessons.indexOf(this.getLessonById(lesson.id)), 1)
-//        console.log('DAY:')
-//        console.log(day)
+        //esta mierda saca los datos de donde estan chantadas las weas
+      //(esta wea pa que no se acaben los datas)  this.availableLessons.splice(this.availableLessons.indexOf(this.getLessonById(lesson.id)), 1)
+        console.log('DAY:')
+        console.log(day)
 //        console.log(day.id)
 //        console.log('TIMESLOT:')
 //        console.log(timeslot)
