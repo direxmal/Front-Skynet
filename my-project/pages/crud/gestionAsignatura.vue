@@ -13,7 +13,7 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm12 md12>
-                  <v-text-field label="Nombre"  :counter="20" :rules="textoRules" name="nombre" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
+                  <v-text-field label="Nombre"  :counter="40" :rules="textoRules2" name="nombre" ref="txtNombre" v-model="addItem.nombre" required></v-text-field>
                 </v-flex>
                 <v-flex xs3>
                  <v-subheader>Seccion : </v-subheader>
@@ -320,6 +320,7 @@ export default {
       { text: 'Opciones', sortable: false, width: '25%', align: 'center' }
     ],
     textoRules: validaciones.textoRules,
+    textoRules2: validaciones.textoRules2,
     items: [],
     valid: true,
     addItem: {

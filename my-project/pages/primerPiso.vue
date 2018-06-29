@@ -14,7 +14,7 @@
         <v-flex>
           <!-- el primer boton-->
             <v-tooltip bottom>
-                <v-btn slot="activator" outline large fab color="primary" >
+                <v-btn slot="activator" type="submit" outline large fab color="primary" @click.native="agregarHorario" >
                   <v-icon>add</v-icon>
                 </v-btn>
               <span>Guardar</span>
@@ -44,14 +44,12 @@
                <v-layout row wrap>
                  <v-flex xs12>
                    <v-select
-                     :items="carrera"
-                     item-value="id"
-                     v-on:change="onChangeSelect"
-                     item-text="nombre"
-                     v-model="carrera"
-                     label="Carrera"
-                     required
-                     autocomplete
+                   :items="carrera"
+                   item-value="id"
+                   required
+                   item-text="nombre"
+                   label="Carrera"
+                   autocomplete
                    ></v-select>
                  </v-flex>
                </v-layout>
@@ -248,6 +246,38 @@ import config from '../config.vue' //conexion
     },
 
     methods: {
+      agregarHorario (e) { // función para agregar un nuevo Seccion
+        console.log("puto");
+            const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+            var dia = this.addItem.newLessonDay
+            console.log(this.addItem.newLessonDay);
+            var rango = this.addItem.newLessonTimeslot
+            console.log(this.addItem.newLessonTimeslot);
+            var asignatura = this.addItem.availableLessons
+            console.log(this.addItem.availableLessons);
+            var sala = this.addItem.sala
+            console.log(this.addItem.sala);
+            if (this.$refs.fAgregarHorario.validate()) {
+              //console.log(nombre + '**** ' + carrera + '**** ' + jornada)
+              axios.post(config.API_LOCATION + '/skynet/horario/', { // petición POST a Seccion para agregar
+                dia : {id: dia},
+                rango : {id: rango},
+                asignatura : {id: asignatura},
+                sala : {id: sala}
+
+              }, { headers: { Authorization: AuthStr } })
+                .then((response) => {
+                  this.initialize()
+                  this.dialogAdd = false // cerrar el modal
+                  this.text = 'Se ha agregado correctamente'
+                  this.snackbar = true
+                  this.$refs.fAgregarHorario.reset()
+                  //this.selectValidado = false
+                  //this.selectValidado2 = false
+                }
+                )
+            }
+          },
       limpiarTabla (){ //para borrar lo de la tabla, pero falta pasarle los datos
         var table = this.timetable
         console.log("wena wacho perro, pulsaste el boton")

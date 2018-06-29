@@ -14,7 +14,7 @@
 	    <!-- Fin de SnackBar-->
 			<!-- Dialog Agregar Jornada -->
  	     <v-dialog v-model="dialogAdd" max-width="500px">
- 	       <v-btn dark color="red dark-2"  slot="activator" >Agregar Jornada</v-btn>
+ 	       <v-btn dark color="red dark-2"  slot="activator" >Agregar Sala</v-btn>
  	             <v-form @submit.prevent="agregarSala" v-model="valid" ref="fAgregarSala" lazy-validation>
  	       <v-card>
  	         <v-card-title>
