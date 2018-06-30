@@ -71,6 +71,7 @@
             <!-- Aqui va lo del cargar-->
             <v-flex xs12 v-for="lesson in availableLessons" :key="lesson.id">
               <v-card draggable="true" @dragstart="startDraggingAvailableLesson($event,lesson)">
+              <!--  lesson.nombre + " " + lesson.seccion.nombre + " " + lesson.docente.nombre + " "+ lesson.docente.apellido -->
                 <v-card-text class="px-0">{{lesson.nombre}}</v-card-text>
               </v-card>
             </v-flex>
@@ -248,41 +249,36 @@ import config from '../config.vue' //conexion
     methods: {
       agregarHorario (e) { // función para agregar un nuevo Seccion
         console.log("puto");
+           var x=1
             const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-            var dia = this.newLessonDay
-            console.log(this.newLessonDay);
-            var rango = this.newLessonTimeslot
-            console.log(this.newLessonTimeslot);
-            var asignatura = this.availableLessons
-            console.log(this.availableLessons);
-            var sala = this.sala
-            console.log(this.sala);
-            if (this.$refs.fAgregarHorario.validate()) {
-              //console.log(nombre + '**** ' + carrera + '**** ' + jornada)
-              axios.post(config.API_LOCATION + '/skynet/horario/', { // petición POST a Seccion para agregar
-                dia : {id: dia},
-                rango : {id: rango},
-                asignatura : {id: asignatura},
-                sala : {id: sala}
+            //console.log(this.lessons);
+            //console.log("del var: " + cantidad);
+            for (var prop in this.lessons) {
+               if ( this.lessons.hasOwnProperty(prop) ) {
+                  // console.log(this.lessons[prop]);
 
-              }, { headers: { Authorization: AuthStr } })
-                .then((response) => {
-                  this.initialize()
-                  this.dialogAdd = false // cerrar el modal
-                  this.text = 'Se ha agregado correctamente'
-                  this.snackbar = true
-                  this.$refs.fAgregarHorario.reset()
-                  //this.selectValidado = false
-                  //this.selectValidado2 = false
+                  const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+                  var dia = this.lessons[prop].day
+                  var rango = this.lessons[prop].timeslot_id
+                  var asignatura = this.lessons[prop].nombre
+                  var sala = 1 
+                  console.log(dia + ' ' + rango + ' ' + asignatura)
+                  axios.post(config.API_LOCATION + '/skynet/horario/', { // petición POST a Seccion para agregar
+                    dia : {id: dia},
+                    rango : {id: rango},
+                    asignatura : {id: asignatura},
+                    sala : {id: sala} }, { headers: { Authorization: AuthStr } })
+                    .then((response) => {console.log("manso error")}),console.log("listo")
                 }
-                )
             }
-          },
+      },
+  
       limpiarTabla (){ //para borrar lo de la tabla, pero falta pasarle los datos
-        var table = this.timetable
-        console.log("wena wacho perro, pulsaste el boton")
-        console.log(this.timetable)
+        var table = this.lessons
+        //console.log("wena wacho perro, pulsaste el boton")
+        //console.log(this.lessons)
         table.splice(0,table.length)
+        console.log(this.lessons)
       },
       onChangeSelect (val) {
         this.id = val.target.value
@@ -334,7 +330,10 @@ import config from '../config.vue' //conexion
         }
 //        console.log(newLesson)
         this.lessons.push(newLesson)
+
       },
+
+      //aqui termina el add
       content (day, timeslot) { //contenido de toda la cuestion
   //      console.log('Day:')
   //      console.log(day.name)
@@ -355,12 +354,12 @@ import config from '../config.vue' //conexion
 //        console.log('Lesson is:', lesson)
 //        console.log('Lesson name:', lesson.name)
 //        console.log('Lesson id:', lesson.id)
-        console.log('Lesson By id:', this.getLessonById(lesson.id))
+      //  console.log('Lesson By id:', this.getLessonById(lesson.id))
         // Remove lesson from available availableLessons:
         //esta mierda saca los datos de donde estan chantadas las weas
       //(esta wea pa que no se acaben los datas)  this.availableLessons.splice(this.availableLessons.indexOf(this.getLessonById(lesson.id)), 1)
-        console.log('DAY:')
-        console.log(day)
+      //  console.log('DAY:')
+      //  console.log(day)
 //        console.log(day.id)
 //        console.log('TIMESLOT:')
 //        console.log(timeslot)
