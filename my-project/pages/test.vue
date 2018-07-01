@@ -69,15 +69,16 @@
                 </v-layout>
               </v-container>
             <!-- Aqui va lo del cargar-->
-            <v-flex xs12 v-for="lesson in availableLessons" :key="lesson.id">
+            <v-flex xs12 v-for="lesson in asignatura" :key="lesson.id">
               <v-card draggable="true" @dragstart="startDraggingAvailableLesson($event,lesson)">
               <!--  lesson.nombre + " " + lesson.seccion.nombre + " " + lesson.docente.nombre + " "+ lesson.docente.apellido -->
-                <v-card-text class="px-0">{{lesson.nombre}}</v-card-text>
+                <v-card-text class="px-0">{{lesson.id + " " + lesson.nombre}}</v-card-text>
               </v-card>
             </v-flex>
           </v-layout>
         </v-container>
       </v-flex>
+      <!-- empieza la tabla en si-->
       <v-flex xs10>
         <v-container grid-list-md text-xs-center>
           <v-layout row wrap>
@@ -237,7 +238,7 @@ import config from '../config.vue' //conexion
           }
         ],
         lessons: [],
-        availableLessons: []
+        asignatura: []
       }
     },
     created () {
@@ -256,18 +257,18 @@ import config from '../config.vue' //conexion
             //console.log("del var: " + cantidad);
             for (var prop in this.lessons) {
                if ( this.lessons.hasOwnProperty(prop) ) {
-                  // console.log(this.lessons[prop]);
+                   console.log(this.lessons[prop]);
 
                   const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-                  var dia = this.lessons[prop].day
-                  var rango = this.lessons[prop].timeslot_id
-                  var asignatura = this.newLessonId
-                  var sala = this.sala.id
-                  console.log(dia + '<dia ' + rango + '<rango ' + asignatura + '<asign ' + sala + '<sala ')
+                  var dia = this.lessons[prop].day //listo
+                  var rango = this.lessons[prop].timeslot_id //listo
+                  var asignatura = this.lessons[prop].id //listo
+                  //console.log(this.lessons);
+                  var sala = 1
+                  //console.log(dia + '<dia ' + rango + '<rango ' + asignatura + '<asign ')
                   axios.post(config.API_LOCATION + '/skynet/horario/', { // petición POST a Seccion para agregar
-                    dia : {id: dia},
-                    rango : {id: rango},
-                    asignatura : {id: asignatura},
+                     
+
                     sala : {id: sala} }, { headers: { Authorization: AuthStr } })
                     .then((response) => {console.log("manso error")}),console.log("listo")
                 }
@@ -318,7 +319,7 @@ import config from '../config.vue' //conexion
         axios.get(config.API_LOCATION + `/skynet/asignatura/`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
           .then((response) => {
             //console.log('WENAAAAA!!')
-            this.availableLessons = response.data
+            this.asignatura = response.data
           })
           .catch(e => {
           })
@@ -326,6 +327,7 @@ import config from '../config.vue' //conexion
       addLesson () {
         const newLesson = {
           'nombre': this.newLessonNombre,
+          'id': parseInt(this.newLessonIdAsignatura),
           'day': parseInt(this.newLessonDay),
           'timeslot_id': parseInt(this.newLessonTimeslot)
         }
@@ -337,7 +339,7 @@ import config from '../config.vue' //conexion
       //aqui termina el add
       content (day, timeslot) { //contenido de toda la cuestion
   //      console.log('Day:')
-  //      console.log(day.name)
+  //      
 //        console.log('Timeslot:')
 //        console.log(timeslot.start)
 //        console.log(timeslot.id)
@@ -353,12 +355,12 @@ import config from '../config.vue' //conexion
 //        console.log(e)
         const lesson = JSON.parse(e.dataTransfer.getData('lesson'))
 //        console.log('Lesson is:', lesson)
-//        console.log('Lesson name:', lesson.name)
+//       
 //        console.log('Lesson id:', lesson.id)
       //  console.log('Lesson By id:', this.getLessonById(lesson.id))
-        // Remove lesson from available availableLessons:
+        // Remove lesson from available asignatura:
         //esta mierda saca los datos de donde estan chantadas las weas
-      //(esta wea pa que no se acaben los datas)  this.availableLessons.splice(this.availableLessons.indexOf(this.getLessonById(lesson.id)), 1)
+      //(esta wea pa que no se acaben los datas)  this.asignatura.splice(this.availableLessons.indexOf(this.getLessonById(lesson.id)), 1)
       //  console.log('DAY:')
       //  console.log(day)
 //        console.log(day.id)
@@ -368,16 +370,17 @@ import config from '../config.vue' //conexion
         this.newLessonNombre = lesson.nombre
         this.newLessonDay = day.id
         this.newLessonTimeslot = timeslot.id
+        this.newLessonIdAsignatura = lesson.id
         this.addLesson()
       },
       getLessonById (id) {
-        return this.availableLessons.find(function (lesson) {
+        return this.asignatura.find(function (lesson) {
           return lesson.id === id
         })
       },
       startDraggingAvailableLesson (e, lesson) {
 //        console.log('Starting drag lesson:')
-//        console.log(lesson.name)
+//       
 //        console.log(lesson)
 //        console.log('Event:')
 //        console.log(e)

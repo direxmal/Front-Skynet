@@ -337,7 +337,7 @@ import config from '../config.vue' //conexion
       },
       content (day, timeslot) { //contenido de toda la cuestion
   //      console.log('Day:')
-  //      console.log(day.name)
+  //      
 //        console.log('Timeslot:')
 //        console.log(timeslot.start)
 //        console.log(timeslot.id)
@@ -353,7 +353,7 @@ import config from '../config.vue' //conexion
 //        console.log(e)
         const lesson = JSON.parse(e.dataTransfer.getData('lesson'))
 //        console.log('Lesson is:', lesson)
-//        console.log('Lesson name:', lesson.name)
+//       
 //        console.log('Lesson id:', lesson.id)
         console.log('Lesson By id:', this.getLessonById(lesson.id))
         // Remove lesson from available availableLessons:
@@ -377,7 +377,7 @@ import config from '../config.vue' //conexion
       },
       startDraggingAvailableLesson (e, lesson) {
 //        console.log('Starting drag lesson:')
-//        console.log(lesson.name)
+//        
 //        console.log(lesson)
 //        console.log('Event:')
 //        console.log(e)
