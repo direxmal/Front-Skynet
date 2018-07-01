@@ -238,7 +238,14 @@ import config from '../config.vue' //conexion
           }
         ],
         lessons: [],
-        asignatura: []
+        asignatura: [],
+        addItem: {
+        id: 0,
+        dia: '',
+        rango_hora: '',
+        id_asignatura: {id: 0},
+        id_sala: {id: 0}
+        },
       }
     },
     created () {
@@ -267,10 +274,12 @@ import config from '../config.vue' //conexion
                   var sala = 1
                   //console.log(dia + '<dia ' + rango + '<rango ' + asignatura + '<asign ')
                   axios.post(config.API_LOCATION + '/skynet/horario/', { // petición POST a Seccion para agregar
-                     
-
-                    sala : {id: sala} }, { headers: { Authorization: AuthStr } })
-                    .then((response) => {console.log("manso error")}),console.log("listo")
+                     dia: '' + dia + '',
+                      rangoHora: '' + rango + '',
+                      asignatura: {id: asignatura},
+                      sala: {id: sala},
+                   }, { headers: { Authorization: AuthStr } })
+                    .then((response) => {}),console.log("listo")
                 }
             }
       },
