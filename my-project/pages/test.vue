@@ -97,7 +97,7 @@
                   <v-card-text class="px-0">{{ timeslot.start + " - " +timeslot.end }}</v-card-text>
                 </v-card>
               </v-flex>
-              <v-flex xs2 v-for="day in days" :key="day.id + '' + timeslot.id ">
+              <v-flex xs2 v-for="day in days" :key="day.id + '' + timeslot.id">
                 <v-card>
                   <v-card-text class="px-0" @drop="dropLesson($event, day, timeslot)" @dragover="allowDrop" v-html="content(day, timeslot )"
                    ></v-card-text>
@@ -141,6 +141,7 @@ import config from '../config.vue' //conexion
         editedIndex: -1,
         newLessonDay: 0,
         newLessonTimeslot: 0,
+        newLessonId: 0,
         days: [
           {
             'id': 1,
@@ -260,9 +261,9 @@ import config from '../config.vue' //conexion
                   const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
                   var dia = this.lessons[prop].day
                   var rango = this.lessons[prop].timeslot_id
-                  var asignatura = this.lessons[prop].nombre
-                  var sala = 1 
-                  console.log(dia + ' ' + rango + ' ' + asignatura)
+                  var asignatura = this.newLessonId
+                  var sala = this.sala.id
+                  console.log(dia + '<dia ' + rango + '<rango ' + asignatura + '<asign ' + sala + '<sala ')
                   axios.post(config.API_LOCATION + '/skynet/horario/', { // petición POST a Seccion para agregar
                     dia : {id: dia},
                     rango : {id: rango},
@@ -380,6 +381,7 @@ import config from '../config.vue' //conexion
 //        console.log(lesson)
 //        console.log('Event:')
 //        console.log(e)
+        this.newLessonId = lesson.id
         e.dataTransfer.effectAllowed = 'move'
         e.dataTransfer.setData('lesson', JSON.stringify(lesson))
       }
