@@ -3,10 +3,13 @@
     <v-container fluid>
        <v-layout row wrap>
          <v-flex xs12 sm6>
-           <v-select
+         <v-select
              :items="sala"
              item-value="id"
              item-text="nombre"
+             v-model="addItem.sala"
+             v-on:change="onChangeSelect"
+             search-input
              label="Sala"
              autocomplete
            ></v-select>
@@ -44,13 +47,15 @@
                <v-layout row wrap>
                  <v-flex xs12>
                    <v-select
-                   :items="carrera"
-                   item-value="id"
-                   required
-                   item-text="nombre"
-                   label="Carrera"
-                   autocomplete
-                   ></v-select>
+                    :items="carrera"
+                     item-value="id"
+                    item-text="nombre"
+                    v-model="addItem.carrera"
+                    v-on:change="onChangeSelectCarrera"
+                    search-input
+                    label="Carrera"
+                    autocomplete
+           ></v-select>
                  </v-flex>
                </v-layout>
              </v-container>
@@ -72,7 +77,7 @@
             <v-flex xs12 v-for="lesson in asignatura" :key="lesson.id">
               <v-card draggable="true" @dragstart="startDraggingAvailableLesson($event,lesson)">
               <!--  lesson.nombre + " " + lesson.seccion.nombre + " " + lesson.docente.nombre + " "+ lesson.docente.apellido -->
-                <v-card-text class="px-0">{{lesson.id + " " + lesson.nombre}}</v-card-text>
+                <v-card-text class="px-0">{{lesson.nombre + " " + lesson.docente.nombre}}</v-card-text>
               </v-card>
             </v-flex>
           </v-layout>
@@ -137,8 +142,8 @@ import config from '../config.vue' //conexion
         seccion: [],
         carreraSelectID: {},
         carrerSelectIDEdit: {},
+        cargas: [],
         newLessonNombre: '',
-        value: '',
         editedIndex: -1,
         newLessonDay: 0,
         newLessonTimeslot: 0,
@@ -251,11 +256,45 @@ import config from '../config.vue' //conexion
     created () {
       this.cargarSelectSala()
       this.cargarSelectCarrera()
-      this.cargarSelectSeccion()
-      this.cargarAsignatura()
     },
 
     methods: {
+      onChangeSelect (val) {
+        this.initialize()
+      },
+      onChangeSelectCarrera (val) {
+        this.cargarSelectSeccion()
+      },
+       initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
+        console.log("entraste a las cargas");
+        const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+        this.limpiarTabla()
+        var sala = this.addItem.sala
+        //console.log("estas son las salas: " + sala)
+        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + sala, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+        .then((response) => {
+          this.cargas = response.data
+          console.log("esto viene: " + this.cargas.length);
+           for (var prop in this.cargas) {
+               if ( this.cargas.hasOwnProperty(prop) ) {
+                    const newLesson = {
+                   'nombre': this.cargas[prop].asignatura.nombre,
+                   'docente': this.cargas[prop].asignatura.docente.nombre,
+                    'id': parseInt(this.cargas[prop].id),
+                    'day': parseInt(this.cargas[prop].dia),
+                    'timeslot_id': parseInt(this.cargas[prop].rangoHora)
+                    }
+                    console.log("listo")
+              //console.log(newLesson)
+              this.lessons.push(newLesson)
+               }
+            }
+
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
       agregarHorario (e) { // función para agregar un nuevo Seccion
         console.log("puto");
            var x=1
@@ -279,7 +318,9 @@ import config from '../config.vue' //conexion
                       asignatura: {id: asignatura},
                       sala: {id: sala},
                    }, { headers: { Authorization: AuthStr } })
-                    .then((response) => {}),console.log("listo")
+                    .then((response) => {
+
+                    }),console.log("listo")
                 }
             }
       },
@@ -290,9 +331,6 @@ import config from '../config.vue' //conexion
         //console.log(this.lessons)
         table.splice(0,table.length)
         console.log(this.lessons)
-      },
-      onChangeSelect (val) {
-        this.id = val.target.value
       },
       cargarSelectSala () {
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
@@ -313,9 +351,10 @@ import config from '../config.vue' //conexion
           })
       },
       cargarSelectSeccion() {
-        var id_carrera = this.carrera
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-        axios.get(config.API_LOCATION + `/skynet/seccion/`,{headers: { Authorization: AuthStr}  }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+        var carrera = this.addItem.carrera
+        console.log("estas son las carreras: " + carrera)
+        axios.get(config.API_LOCATION + `/skynet/horario/carrera/` + carrera, {headers: { Authorization: AuthStr}  }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
           .then((response) => {
             this.seccion = response.data
           })
@@ -334,8 +373,12 @@ import config from '../config.vue' //conexion
           })
       },
       addLesson () {
+        if (!this.id == this.lessons.id) {
+          alert('ASIGNATURA DUPLICADA')
+        }
         const newLesson = {
           'nombre': this.newLessonNombre,
+          'docente': this.newLessonDocente,
           'id': parseInt(this.newLessonIdAsignatura),
           'day': parseInt(this.newLessonDay),
           'timeslot_id': parseInt(this.newLessonTimeslot)
@@ -377,6 +420,7 @@ import config from '../config.vue' //conexion
 //        console.log(timeslot)
 //        console.log(timeslot.id)
         this.newLessonNombre = lesson.nombre
+        this.newLessonDocente = lesson.docente.nombre
         this.newLessonDay = day.id
         this.newLessonTimeslot = timeslot.id
         this.newLessonIdAsignatura = lesson.id
