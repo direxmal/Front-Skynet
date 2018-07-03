@@ -115,7 +115,7 @@
 
 	 <!-- Dialog Editar seccion -->
 	 <v-dialog v-model="dialogEdit" max-width="500px">
-	 <v-form @submit.prevent="editSubCat" ref="fEditarSubCat">
+	 <v-form @submit.prevent="editSeccion" ref="fEditarSeccion">
  <v-card>
 	 <v-card-title>
 		 <span class="headline">Editar Subcategoria</span>
@@ -140,7 +140,7 @@
 					v-model="editedItem.carrera"
 					search-input
 					v-on:change="onChangeSelect"
-					:rules="[v => this.selectValidado || 'Campo Vacío']"
+					
 					required
 					autocomplete
 					label="Carrera"
@@ -158,7 +158,7 @@
 				v-model="editedItem.jornada"
 				search-input
 				v-on:change="onChangeSelect2"
-				:rules="[v => this.selectValidado2 || 'Campo Vacío']"
+			
 				required
 				autocomplete
 				label="Jornada"
@@ -329,7 +329,7 @@ export default {
 		editedItem: { // prop temporal que guarda el objeto a editar o eliminar
 			id: 0,
 			nombre: '',
-      id_carrera: {id: 0},
+      		id_carrera: {id: 0},
 			id_jornada: {id: 0}
 		},
 		detailItem: {
@@ -372,10 +372,10 @@ export default {
 	},
 	methods: {
 		onChangeSelect (val) {
-			this.editedItem.carrera = val.target.value
+			var carreraID = this.editedItem.carrera
 		},
 		onChangeSelect2 (val) {
-			this.editedItem.jornada = val.target.value
+			var jornadaID = this.editedItem.jornada
 		},
 		onChangeSelectAgregar (val) {
 			this.selectValidado = true
@@ -439,11 +439,14 @@ export default {
 			const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
         var id = this.editedItem.id // obtener id del objeto que se desea editar formulario
         var nombre = this.editedItem.nombre // obtener nombre del objeto que se desea editar formulario
-        var idCarrera = this.editedItem.carrera
-				var idJornada = this.editedItem.jornada
+        console.log(nombre)
+        var idCarrera = this.carreraID
+        console.log(idCarrera)
+		var idJornada = this.jornadaID
+		console.log(idjornada)
         if (this.$refs.fEditarSeccion.validate()) {
-          axios.put(config.API_LOCATION + '/skynet/seccion' + id + '', {// petición put para editar el tipo
-            nombre: '' + nombre + '', id_carrera: { id: idCarrera }, id_jornada: { id: idJornada }
+          axios.put(config.API_LOCATION + '/skynet/seccion/' + id, {// petición put para editar el tipo
+            nombre: '' + nombre + '', carrera: { id: idCarrera }, jornada: { id: idJornada }
           }, { headers: { Authorization: AuthStr } })
             .then(response => {
               this.initialize()

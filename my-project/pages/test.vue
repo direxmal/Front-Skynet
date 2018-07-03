@@ -16,12 +16,14 @@
          </v-flex>
         <v-flex>
           <!-- el primer boton-->
+            <span>Guardar</span>
             <v-tooltip bottom>
                 <v-btn slot="activator" type="submit" outline large fab color="primary" @click.native="agregarHorario" ref="fAgregarHorario" >
                   <v-icon>add</v-icon>
                 </v-btn>
               <span>Guardar</span>
            </v-tooltip>
+
              <!-- el segundo boton-->
            <v-tooltip bottom>
                <v-btn slot="activator" outline large fab color="primary" @click.native="limpiarTabla">
@@ -29,11 +31,123 @@
                </v-btn>
              <span>Limpiar</span>
           </v-tooltip>
+             <!-- el tercer boton-->
+              <v-tooltip bottom>
+               <v-btn slot="activator" outline large fab color="primary" @click.native="dialog = true">
+                 <v-icon>delete</v-icon>
+               </v-btn>
+             <span>Borrar</span>
+          </v-tooltip>
+          <!-- modal de borrar-->
+          <v-layout row justify-center>
+       <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+        <v-card>
+          <v-toolbar dark color= red darken-3>
+            <v-btn icon dark @click.native="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Borrar Horarios</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn dark flat @click.native="alerta">Confirmar</v-btn>
+
+            </v-toolbar-items>
+
+          </v-toolbar>
+           <v-data-table
+            v-model="selected"
+            :headers="headers"
+            :items="modal"
+            :pagination.sync="pagination"
+            select-all
+            item-key="id"
+            class="elevation-1"
+          >
+    <template slot="headers" slot-scope="props">
+      <tr>
+        <th>
+          <v-checkbox
+            :input-value="props.all"
+            :indeterminate="props.indeterminate"
+            primary
+            hide-details
+            @click.native="toggleAll"
+          ></v-checkbox>
+        </th>
+        <th
+          v-for="header in props.headers"
+          :key="header.text"
+          :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+          @click="changeSort(header.value)"
+        >
+          <v-icon small>arrow_upward</v-icon>
+          {{ header.text }}
+        </th>
+      </tr>
+    </template>
+    <template slot="items" slot-scope="props">
+      <tr :active="props.selected" @click="props.selected = !props.selected">
+        <td>
+          <v-checkbox
+            :input-value="props.selected"
+            primary
+            hide-details
+          ></v-checkbox>
+        </td>
+        <td class="text-xs-center">{{ props.item.id }}</td>
+        <td class="text-xs-center">{{ props.item.asignatura.nombre }}</td>
+        <td class="text-xs-center">{{ props.item.dia.nombre }}</td>
+        <td class="text-xs-center">{{ props.item.rangoHora.start }}</td>
+        <td class="text-xs-center">{{ props.item.rangoHora.end }}</td>
+        <td class="text-xs-center">{{ props.item.sala.nombre }}</td>
+      </tr>
+    </template>
+  </v-data-table>
+          <v-divider></v-divider>
+          <v-list three-line subheader>
+          </v-list>
+        </v-card>
+      </v-dialog>
+      <!-- dialog 2-->
+        <v-dialog v-model="dialog2" max-width="290">
+        
+      <v-card>
+        <v-card-title class="headline">Esta seguro de que desea borrar?</v-card-title>
+
+        <v-card-text>
+          Al borrar los datos se eliminan los datos para siempre
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="dialog2 = false"
+          >
+            Cancelar
+          </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="borrarDatos"
+          >
+            Acepto
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+        </v-dialog>
+      </v-layout>
+        <!-- termino el modal2-->
+            <!-- lo demas-->
         </v-flex>
        </v-layout>
      </v-container>
      <div>
      </div>
+     <!-- fin del dialog modal y vola-->
     <v-layout row wrap>
       <v-flex xs2>
         <v-container grid-list-md text-xs-center>
@@ -136,118 +250,47 @@ import config from '../config.vue' //conexion
   export default {
     data () {
       return {
+        pagination: {
+        sortBy: 'id'
+      },
+      selected: [],
+      headers: [
+        {
+        text: 'ID',
+        value: 'id',
+        sortable: true,
+        width: '25%',
+        align: 'center'
+      },
+      { text: 'Asignatura', value: 'idAsignatura', width: '25%', align: 'center' },
+      { text: 'Dia', value: 'idDia', width: '25%', align: 'center' },
+      { text: 'Inicio', value: 'idRangoHora', width: '25%', align: 'center' },
+      { text: 'Termino', value: 'idRangoHora', width: '25%', align: 'center' },
+      { text: 'Sala', value: 'idSala', width: '25%', align: 'center' }
+      ],
         timetable: [],
         sala: [],
         carrera: [],
         seccion: [],
+        dialog: false,
+        dialog2: false,
         carreraSelectID: {},
         carrerSelectIDEdit: {},
         cargas: [],
+        modal: [],
         newLessonNombre: '',
         editedIndex: -1,
         newLessonDay: 0,
         newLessonTimeslot: 0,
         newLessonId: 0,
-        days: [
-          {
-            'id': 1,
-            'nombre': 'Lunes'
-          },
-          {
-            'id': 2,
-            'nombre': 'Martes'
-          },
-          {
-            'id': 3,
-            'nombre': 'Miercoles'
-          },
-          {
-            'id': 4,
-            'nombre': 'Jueves'
-          },
-          {
-            'id': 5,
-            'nombre': 'Viernes'
-          }
-        ],
-        timeslots: [
-          {
-            'id': 1,
-            'start': '08:30',
-            'end': '09:15'
-          },
-          {
-            'id': 2,
-            'start': '09:15',
-            'end': '10:00'
-          },
-          {
-            'id': 3,
-            'start': '10:00',
-            'end': '10:45'
-          },
-          {
-            'id': 4,
-            'start': '10:45',
-            'end': '11:30'
-          },
-          {
-            'id': 5,
-            'start': '11:30',
-            'end': '12:15'
-          },
-          {
-            'id': 6,
-            'start': '12:15',
-            'end': '13:00'
-          },
-          {
-            'id': 7,
-            'start': '13:00',
-            'end': '13:45'
-          },
-          {
-            'id': 8,
-            'start': '13:45',
-            'end': '13:30'
-          },
-          {
-            'id': 9,
-            'start': '13:30',
-            'end': '14:15'
-          },
-          {
-            'id': 10,
-            'start': '14:15',
-            'end': '15:00'
-          },
-          {
-            'id': 11,
-            'start': '15:00',
-            'end': '15:45'
-          },
-          {
-            'id': 12,
-            'start': '15:45',
-            'end': '16:30'
-          },
-          {
-            'id': 13,
-            'start': '16:30',
-            'end': '17:15'
-          },
-          {
-            'id': 14,
-            'start': '17:15',
-            'end': '18:00'
-          }
-        ],
+        days: [],
+        timeslots: [],
         lessons: [],
         asignatura: [],
         addItem: {
         id: 0,
-        dia: '',
-        rango_hora: '',
+        id_dia: {id: 0},
+        id_rango_hora: {id: 0},
         id_asignatura: {id: 0},
         id_sala: {id: 0}
         },
@@ -255,15 +298,57 @@ import config from '../config.vue' //conexion
     },
     created () {
       this.cargarSelectSala()
+      this.cargarDias()
+      this.cargarRangos()
+      this.cargarAsignatura()
       this.cargarSelectCarrera()
     },
 
     methods: {
+      alerta(){
+        //console.log("holens")
+        this.dialog2 = true
+        //console.log(this.dialog2)
+      },
+      toggleAll () {
+        if (this.selected.length) this.selected = []
+        else this.selected = this.modal.slice()
+      },
+      changeSort (column) {
+        if (this.pagination.sortBy === column) {
+          this.pagination.descending = !this.pagination.descending
+        } else {
+          this.pagination.sortBy = column
+          this.pagination.descending = false
+        }
+      },
       onChangeSelect (val) {
         this.initialize()
+        this.cargarModal()
       },
       onChangeSelectCarrera (val) {
         this.cargarSelectSeccion()
+      },
+      cargarDias(){
+        const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+      axios.get(config.API_LOCATION + `/skynet/dia/`, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+        .then((response) => {
+          //console.log(response.data)
+          this.days = response.data
+        })
+        .catch(e => {
+        })
+      },
+      cargarRangos(){
+         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+      axios.get(config.API_LOCATION + `/skynet/timeslot/`, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+        .then((response) => {
+          //console.log(response.data)
+          this.timeslots = response.data
+        })
+        .catch(e => {
+        })
+
       },
        initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
         console.log("entraste a las cargas");
@@ -281,8 +366,8 @@ import config from '../config.vue' //conexion
                    'nombre': this.cargas[prop].asignatura.nombre,
                    'docente': this.cargas[prop].asignatura.docente.nombre,
                     'id': parseInt(this.cargas[prop].id),
-                    'day': parseInt(this.cargas[prop].dia),
-                    'timeslot_id': parseInt(this.cargas[prop].rangoHora)
+                    'day': parseInt(this.cargas[prop].dia.id),
+                    'timeslot_id': parseInt(this.cargas[prop].rangoHora.id)
                     }
                     console.log("listo")
               //console.log(newLesson)
@@ -290,6 +375,19 @@ import config from '../config.vue' //conexion
                }
             }
 
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    cargarModal () { // Función que recarga los datos de la Tabla mediante request a la API REST
+        console.log("entraste a las cargas del modal");
+        const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+        var sala = this.addItem.sala
+        //console.log("estas son las salas: " + sala)
+        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + sala, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+        .then((response) => {
+          this.modal = response.data
         })
         .catch(e => {
           console.log(e)
@@ -313,8 +411,8 @@ import config from '../config.vue' //conexion
                   var sala = 1
                   //console.log(dia + '<dia ' + rango + '<rango ' + asignatura + '<asign ')
                   axios.post(config.API_LOCATION + '/skynet/horario/', { // petición POST a Seccion para agregar
-                     dia: '' + dia + '',
-                      rangoHora: '' + rango + '',
+                     dia: {id: dia},
+                     rangoHora: {id: rango},
                       asignatura: {id: asignatura},
                       sala: {id: sala},
                    }, { headers: { Authorization: AuthStr } })
@@ -331,6 +429,24 @@ import config from '../config.vue' //conexion
         //console.log(this.lessons)
         table.splice(0,table.length)
         console.log(this.lessons)
+      },
+      borrarDatos (){
+        this.dialog2 = false
+        const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+        for (var prop in this.lessons) {
+               if ( this.selected.hasOwnProperty(prop) ) {
+                   console.log(this.selected[prop]);
+
+                  const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+                  var id = this.selected[prop].id //listo
+                  //console.log(this.lessons);
+                  
+                  //console.log(dia + '<dia ' + rango + '<rango ' + asignatura + '<asign ')
+                 
+                }
+            }
+    
+
       },
       cargarSelectSala () {
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
@@ -370,6 +486,7 @@ import config from '../config.vue' //conexion
             this.asignatura = response.data
           })
           .catch(e => {
+            console.log(e)
           })
       },
       addLesson () {
