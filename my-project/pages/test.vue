@@ -193,6 +193,9 @@
                       item-value="id"
                       required
                       item-text="nombre"
+                      v-model="addItem.seccion"
+                      v-on:change="onChangeSelectSeccion"
+                      search-input
                       label="Sección"
                       autocomplete
                     ></v-select>
@@ -346,6 +349,9 @@ import config from '../config.vue' //conexion
       },
       onChangeSelectCarrera (val) {
         this.cargarSelectSeccion()
+      },
+      onChangeSelectSeccion (val) {
+        this.cargarAsignatura()
       },
       cargarDias(){
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
@@ -507,13 +513,13 @@ import config from '../config.vue' //conexion
       cargarAsignatura() {
         //console.log('WENAA loquete')
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-        axios.get(config.API_LOCATION + `/skynet/asignatura/`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+        var seccion = this.addItem.seccion
+        axios.get(config.API_LOCATION + `/skynet/asignatura/seccion/` + seccion, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
           .then((response) => {
             //console.log('WENAAAAA!!')
             this.asignatura = response.data
           })
           .catch(e => {
-            console.log(e)
           })
       },
       addLesson () {
