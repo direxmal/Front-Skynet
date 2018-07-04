@@ -1,5 +1,17 @@
 <template>
   <v-container grid-list-md text-xs-center>
+     <!-- SnackBar (mensaje de Success)-->
+ <v-snackbar
+      :timeout="timeout"
+      :color="color"
+      :multi-line="mode === 'multi-line'"
+      :vertical="mode === 'vertical'"
+      v-model="snackbar"
+    >
+      {{ text }}
+      <v-btn dark flat @click.native="snackbar = false">Cerrar</v-btn>
+    </v-snackbar>
+    <!-- Fin de SnackBar-->
     <v-container fluid>
        <v-layout row wrap>
          <v-flex xs12 sm6>
@@ -122,7 +134,7 @@
           <v-spacer></v-spacer>
 
           <v-btn
-            color="green darken-1"
+            color="primary"
             flat="flat"
             @click="dialog2 = false"
           >
@@ -130,7 +142,7 @@
           </v-btn>
 
           <v-btn
-            color="green darken-1"
+            color="red darken-3"
             flat="flat"
             @click="borrarDatos"
           >
@@ -270,6 +282,11 @@ import config from '../config.vue' //conexion
       ],
         timetable: [],
         sala: [],
+         snackbar: false,
+      color: 'red darken-3',
+      mode: '',
+      timeout: 3000,
+      text: 'Se ha agregado con exito',
         carrera: [],
         seccion: [],
         dialog: false,
@@ -283,6 +300,7 @@ import config from '../config.vue' //conexion
         newLessonDay: 0,
         newLessonTimeslot: 0,
         newLessonId: 0,
+        guardado: [],
         days: [],
         timeslots: [],
         lessons: [],
@@ -397,17 +415,17 @@ import config from '../config.vue' //conexion
         console.log("puto");
            var x=1
             const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-            //console.log(this.lessons);
+            //console.log(this.guardado);
             //console.log("del var: " + cantidad);
-            for (var prop in this.lessons) {
-               if ( this.lessons.hasOwnProperty(prop) ) {
-                   console.log(this.lessons[prop]);
+            for (var prop in this.guardado) {
+               if ( this.guardado.hasOwnProperty(prop) ) {
+                   console.log(this.guardado[prop]);
 
                   const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-                  var dia = this.lessons[prop].day //listo
-                  var rango = this.lessons[prop].timeslot_id //listo
-                  var asignatura = this.lessons[prop].id //listo
-                  //console.log(this.lessons);
+                  var dia = this.guardado[prop].day //listo
+                  var rango = this.guardado[prop].timeslot_id //listo
+                  var asignatura = this.guardado[prop].id //listo
+                  //console.log(this.guardado);
                   var sala = 1
                   //console.log(dia + '<dia ' + rango + '<rango ' + asignatura + '<asign ')
                   axios.post(config.API_LOCATION + '/skynet/horario/', { // petición POST a Seccion para agregar
@@ -417,7 +435,11 @@ import config from '../config.vue' //conexion
                       sala: {id: sala},
                    }, { headers: { Authorization: AuthStr } })
                     .then((response) => {
-
+                      this.initialize()
+                      var table = this.guardado
+                      table.splice(0,table.length)
+                      this.snackbar = true
+                      this.text = 'Se ha agregado correctamente'
                     }),console.log("listo")
                 }
             }
@@ -436,14 +458,19 @@ import config from '../config.vue' //conexion
         for (var prop in this.lessons) {
                if ( this.selected.hasOwnProperty(prop) ) {
                    console.log(this.selected[prop]);
-
                   const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-                  var id = this.selected[prop].id //listo
-                  //console.log(this.lessons);
-                  
-                  //console.log(dia + '<dia ' + rango + '<rango ' + asignatura + '<asign ')
+                  var idBorrar = parseInt(this.selected[prop].id) //listo
+                  console.log("id: " + idBorrar)
+                  axios.delete(config.API_LOCATION + '/skynet/horario/' + idBorrar + '', { headers: { Authorization: AuthStr } }) // petición GET a Tipo para traer a todos los objetos "tipo"
+                    .then((response) => {
+                    this.initialize()
+                    this.cargarModal()
+                      })
+                      .catch(e => {
+                        })
                  
                 }
+                console.log("listeilor")
             }
     
 
@@ -502,6 +529,7 @@ import config from '../config.vue' //conexion
         }
 //        console.log(newLesson)
         this.lessons.push(newLesson)
+        this.guardado.push(newLesson)
 
       },
 

@@ -446,7 +446,9 @@ export default {
 		console.log(idjornada)
         if (this.$refs.fEditarSeccion.validate()) {
           axios.put(config.API_LOCATION + '/skynet/seccion/' + id, {// petición put para editar el tipo
-            nombre: '' + nombre + '', carrera: { id: idCarrera }, jornada: { id: idJornada }
+            nombre: '' + nombre + '', 
+            carrera: { id: idCarrera }, 
+            jornada: { id: idJornada }
           }, { headers: { Authorization: AuthStr } })
             .then(response => {
               this.initialize()
