@@ -17,13 +17,16 @@
          <v-flex xs12 sm6>
          <v-select
              :items="sala"
-             item-value="id"
              item-text="nombre"
+             item-value="id"
+             value=""
              v-model="addItem.sala"
-             v-on:change="onChangeSelect"
              search-input
+             v-on:change="onChangeSelect"
+             required
              label="Sala"
              autocomplete
+             single-line 
            ></v-select>
          </v-flex>
         <v-flex>
@@ -295,6 +298,7 @@ import config from '../config.vue' //conexion
         carrerSelectIDEdit: {},
         cargas: [],
         modal: [],
+        value: '',
         newLessonNombre: '',
         editedIndex: -1,
         newLessonDay: 0,
@@ -341,7 +345,8 @@ import config from '../config.vue' //conexion
         }
       },
       onChangeSelect (val) {
-        this.initialize()
+        console.log(val);
+        this.initialize(val)
         this.cargarModal()
       },
       onChangeSelectCarrera (val) {
@@ -368,13 +373,12 @@ import config from '../config.vue' //conexion
         })
 
       },
-       initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
+       initialize (val) { // Función que recarga los datos de la Tabla mediante request a la API REST
+        console.log("Holi "+ val);
         console.log("entraste a las cargas");
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
         this.limpiarTabla()
-        var sala = this.addItem.sala
-        //console.log("estas son las salas: " + sala)
-        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + sala, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + val, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
         .then((response) => {
           this.cargas = response.data
           console.log("esto viene: " + this.cargas.length);
@@ -426,7 +430,7 @@ import config from '../config.vue' //conexion
                   var rango = this.guardado[prop].timeslot_id //listo
                   var asignatura = this.guardado[prop].id //listo
                   //console.log(this.guardado);
-                  var sala = 1
+                   var sala = this.addItem.sala
                   //console.log(dia + '<dia ' + rango + '<rango ' + asignatura + '<asign ')
                   axios.post(config.API_LOCATION + '/skynet/horario/', { // petición POST a Seccion para agregar
                      dia: {id: dia},
@@ -438,7 +442,7 @@ import config from '../config.vue' //conexion
                       this.initialize()
                       var table = this.guardado
                       table.splice(0,table.length)
-                      this.snackbar = true
+                      this.snackbar = true 
                       this.text = 'Se ha agregado correctamente'
                     }),console.log("listo")
                 }
@@ -465,6 +469,8 @@ import config from '../config.vue' //conexion
                     .then((response) => {
                     this.initialize()
                     this.cargarModal()
+                    this.snackbar = true 
+                      this.text = 'Se ha borrado correctamente'
                       })
                       .catch(e => {
                         })
@@ -479,6 +485,7 @@ import config from '../config.vue' //conexion
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
         axios.get(config.API_LOCATION + `/skynet/sala/piso1`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
           .then((response) => {
+            //alert(JSON.stringify(response.data));
             this.sala = response.data
           })
           .catch(e => {
