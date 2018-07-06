@@ -381,6 +381,7 @@ import config from '../config.vue' //conexion
       },
        initialize (val) { // Función que recarga los datos de la Tabla mediante request a la API REST
         console.log("Holi "+ val);
+        console.log("wena wnea")
         console.log("entraste a las cargas");
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
         this.limpiarTabla()
