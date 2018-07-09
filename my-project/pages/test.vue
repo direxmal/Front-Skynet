@@ -56,7 +56,7 @@
           <!-- modal de borrar-->
           <v-layout row justify-center>
        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-        <v-card>
+        <v-card>         
           <v-toolbar dark color= red darken-3>
             <v-btn icon dark @click.native="dialog = false">
               <v-icon>close</v-icon>
@@ -181,6 +181,7 @@
                     item-text="nombre"
                     v-model="addItem.carrera"
                     v-on:change="onChangeSelectCarrera"
+                    value=""
                     search-input
                     label="Carrera"
                     autocomplete
@@ -194,6 +195,7 @@
                     <v-select
                       :items="seccion"
                       item-value="id"
+                      value=""
                       required
                       item-text="nombre"
                       v-model="addItem.seccion"
@@ -325,7 +327,6 @@ import config from '../config.vue' //conexion
       this.cargarSelectSala()
       this.cargarDias()
       this.cargarRangos()
-      this.cargarAsignatura()
       this.cargarSelectCarrera()
     },
 
@@ -348,15 +349,15 @@ import config from '../config.vue' //conexion
         }
       },
       onChangeSelect (val) {
-        console.log(val);
+        console.log("cambiado los selects: " + val);
         this.initialize(val)
-        this.cargarModal()
+        this.cargarModal(val)
       },
       onChangeSelectCarrera (val) {
-        this.cargarSelectSeccion()
+        this.cargarSelectSeccion(val)
       },
       onChangeSelectSeccion (val) {
-        this.cargarAsignatura()
+        this.cargarAsignatura(val)
       },
       cargarDias(){
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
@@ -409,12 +410,11 @@ import config from '../config.vue' //conexion
           console.log(e)
         })
     },
-    cargarModal () { // Función que recarga los datos de la Tabla mediante request a la API REST
+    cargarModal (val) { // Función que recarga los datos de la Tabla mediante request a la API REST
         console.log("entraste a las cargas del modal");
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-        var sala = this.addItem.sala
         //console.log("estas son las salas: " + sala)
-        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + sala, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + val, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
         .then((response) => {
           this.modal = response.data
         })
@@ -446,11 +446,11 @@ import config from '../config.vue' //conexion
                       sala: {id: sala},
                    }, { headers: { Authorization: AuthStr } })
                     .then((response) => {
-                      this.initialize()
                       var table = this.guardado
                       table.splice(0,table.length)
                       this.snackbar = true 
                       this.text = 'Se ha agregado correctamente'
+                      this.cargarModal(val)
                     }),console.log("listo")
                 }
             }
@@ -463,21 +463,20 @@ import config from '../config.vue' //conexion
         table.splice(0,table.length)
         console.log(this.lessons)
       },
-      borrarDatos (){
+      borrarDatos (val){
         this.dialog2 = false
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
         for (var prop in this.lessons) {
                if ( this.selected.hasOwnProperty(prop) ) {
-                   console.log(this.selected[prop]);
+                  //console.log(this.selected[prop]);
                   const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
                   var idBorrar = parseInt(this.selected[prop].id) //listo
-                  console.log("id: " + idBorrar)
+                  //console.log("id: " + idBorrar)
                   axios.delete(config.API_LOCATION + '/skynet/horario/' + idBorrar + '', { headers: { Authorization: AuthStr } }) // petición GET a Tipo para traer a todos los objetos "tipo"
-                    .then((response) => {
-                    this.initialize()
-                    this.cargarModal()
+                    .then((response) => { 
                     this.snackbar = true 
-                      this.text = 'Se ha borrado correctamente'
+                    this.text = 'Se ha borrado correctamente'
+                    this.onChangeSelect(val)
                       })
                       .catch(e => {
                         })
@@ -507,22 +506,23 @@ import config from '../config.vue' //conexion
           .catch(e => {
           })
       },
-      cargarSelectSeccion() {
+      cargarSelectSeccion(val) {
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-        var carrera = this.addItem.carrera
-        console.log("estas son las carreras: " + carrera)
-        axios.get(config.API_LOCATION + `/skynet/horario/carrera/` + carrera, {headers: { Authorization: AuthStr}  }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+        //var carrera = this.addItem.carrera
+        console.log("estas son las carreras: " + val)
+        axios.get(config.API_LOCATION + `/skynet/horario/carrera/` + val, {headers: { Authorization: AuthStr}  }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
           .then((response) => {
             this.seccion = response.data
           })
           .catch(e => {
           })
       },
-      cargarAsignatura() {
+      cargarAsignatura(val) {
         //console.log('WENAA loquete')
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-        var seccion = this.addItem.seccion
-        axios.get(config.API_LOCATION + `/skynet/asignatura/seccion/` + seccion, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+        //var seccion = this.addItem.seccion
+        console.log("estas son las asignaturas: " + val)
+        axios.get(config.API_LOCATION + `/skynet/asignatura/seccion/` + val, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
           .then((response) => {
             //console.log('WENAAAAA!!')
             this.asignatura = response.data

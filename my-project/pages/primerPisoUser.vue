@@ -3,22 +3,34 @@
     <v-container fluid>
        <v-layout row wrap>
          <v-flex xs12 sm6>
-           <v-select
+         <v-select
              :items="sala"
-             item-value="id"
              item-text="nombre"
+             item-value="id"
+             value=""
              v-model="addItem.sala"
-             v-on:change="onChangeSelect"
              search-input
+             v-on:change="onChangeSelect"
+             required
              label="Sala"
              autocomplete
+             single-line 
            ></v-select>
          </v-flex>
-       </v-layout>
-     </v-container>
-     <div>
-     </div>
-    <v-layout row wrap>
+      </v-layout>
+      <v-flex>
+       
+          <v-layout>
+            <!-- Aqui va lo del cargar-->
+            <v-flex xs12 v-for="lesson in asignatura" :key="lesson.id">
+              <v-card draggable="true" @dragstart="startDraggingAvailableLesson($event,lesson)">
+              <!--  lesson.nombre + " " + lesson.seccion.nombre + " " + lesson.docente.nombre + " "+ lesson.docente.apellido -->
+                <v-card-text class="px-0">{{lesson.nombre + " " + lesson.docente.nombre}}</v-card-text>
+              </v-card>
+            </v-flex>
+          </v-layout>
+           </v-flex>
+        </v-container>
       <!-- empieza la tabla en si-->
       <v-flex xs10>
         <v-container grid-list-md text-xs-center>
@@ -52,7 +64,7 @@
     </v-layout>
   </v-container>
 </template>
- 
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   [draggable] {
@@ -65,125 +77,44 @@
     cursor: move;
   }
 </style>
- 
+
 <script>
 import axios from 'axios' // Modulo para realizar las peticiones
 import config from '../config.vue' //conexion
   export default {
+   layout: 'vistaUsuarioUser',
     data () {
       return {
         timetable: [],
         sala: [],
+         snackbar: false,
+      color: 'red darken-3',
+      mode: '',
+      timeout: 3000,
+      text: 'Se ha agregado con exito',
         carrera: [],
         seccion: [],
+        dialog: false,
+        dialog2: false,
         carreraSelectID: {},
         carrerSelectIDEdit: {},
-        newLessonNombre: '',
+        cargas: [],
+        modal: [],
         value: '',
+        newLessonNombre: '',
         editedIndex: -1,
         newLessonDay: 0,
         newLessonTimeslot: 0,
         newLessonId: 0,
-        days: [
-          {
-            'id': 1,
-            'nombre': 'Lunes'
-          },
-          {
-            'id': 2,
-            'nombre': 'Martes'
-          },
-          {
-            'id': 3,
-            'nombre': 'Miercoles'
-          },
-          {
-            'id': 4,
-            'nombre': 'Jueves'
-          },
-          {
-            'id': 5,
-            'nombre': 'Viernes'
-          }
-        ],
-        timeslots: [
-          {
-            'id': 1,
-            'start': '08:30',
-            'end': '09:15'
-          },
-          {
-            'id': 2,
-            'start': '09:15',
-            'end': '10:00'
-          },
-          {
-            'id': 3,
-            'start': '10:00',
-            'end': '10:45'
-          },
-          {
-            'id': 4,
-            'start': '10:45',
-            'end': '11:30'
-          },
-          {
-            'id': 5,
-            'start': '11:30',
-            'end': '12:15'
-          },
-          {
-            'id': 6,
-            'start': '12:15',
-            'end': '13:00'
-          },
-          {
-            'id': 7,
-            'start': '13:00',
-            'end': '13:45'
-          },
-          {
-            'id': 8,
-            'start': '13:45',
-            'end': '13:30'
-          },
-          {
-            'id': 9,
-            'start': '13:30',
-            'end': '14:15'
-          },
-          {
-            'id': 10,
-            'start': '14:15',
-            'end': '15:00'
-          },
-          {
-            'id': 11,
-            'start': '15:00',
-            'end': '15:45'
-          },
-          {
-            'id': 12,
-            'start': '15:45',
-            'end': '16:30'
-          },
-          {
-            'id': 13,
-            'start': '16:30',
-            'end': '17:15'
-          },
-          {
-            'id': 14,
-            'start': '17:15',
-            'end': '18:00'
-          }
-        ],
+        guardado: [],
+        days: [],
+        timeslots: [],
         lessons: [],
         asignatura: [],
         addItem: {
         id: 0,
-        dia: '',
-        rango_hora: '',
+        id_dia: {id: 0},
+        id_rango_hora: {id: 0},
         id_asignatura: {id: 0},
         id_sala: {id: 0}
         },
@@ -191,19 +122,56 @@ import config from '../config.vue' //conexion
     },
     created () {
       this.cargarSelectSala()
+      this.cargarDias()
+      this.cargarRangos()
+      this.initialize()
     },
- 
+
     methods: {
       onChangeSelect (val) {
-        this.initialize()
+        console.log("cambiado los selects: " + val);
+        this.initialize(val)
       },
-      initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
+      toggleAll () {
+        if (this.selected.length) this.selected = []
+        else this.selected = this.modal.slice()
+      },
+      changeSort (column) {
+        if (this.pagination.sortBy === column) {
+          this.pagination.descending = !this.pagination.descending
+        } else {
+          this.pagination.sortBy = column
+          this.pagination.descending = false
+        }
+      },
+      cargarDias(){
+        const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+      axios.get(config.API_LOCATION + `/skynet/dia/`, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+        .then((response) => {
+          //console.log(response.data)
+          this.days = response.data
+        })
+        .catch(e => {
+        })
+      },
+      cargarRangos(){
+         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+      axios.get(config.API_LOCATION + `/skynet/timeslot/`, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+        .then((response) => {
+          //console.log(response.data)
+          this.timeslots = response.data
+        })
+        .catch(e => {
+        })
+
+      },
+       initialize (val) { // Función que recarga los datos de la Tabla mediante request a la API REST
+        console.log("Holi "+ val);
+        console.log("wena wnea")
         console.log("entraste a las cargas");
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
         this.limpiarTabla()
-        var sala = this.addItem.sala
-        console.log("estas son las salas: " + sala)
-        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + sala, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + val, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
         .then((response) => {
           this.cargas = response.data
           console.log("esto viene: " + this.cargas.length);
@@ -213,8 +181,8 @@ import config from '../config.vue' //conexion
                    'nombre': this.cargas[prop].asignatura.nombre,
                    'docente': this.cargas[prop].asignatura.docente.nombre,
                     'id': parseInt(this.cargas[prop].id),
-                    'day': parseInt(this.cargas[prop].dia),
-                    'timeslot_id': parseInt(this.cargas[prop].rangoHora)
+                    'day': parseInt(this.cargas[prop].dia.id),
+                    'timeslot_id': parseInt(this.cargas[prop].rangoHora.id)
                     }
                     console.log("listo")
               //console.log(newLesson)
@@ -227,35 +195,40 @@ import config from '../config.vue' //conexion
           console.log(e)
         })
     },
-    limpiarTabla (){ //para borrar lo de la tabla, pero falta pasarle los datos
+      limpiarTabla (){ //para borrar lo de la tabla, pero falta pasarle los datos
         var table = this.lessons
         //console.log("wena wacho perro, pulsaste el boton")
         //console.log(this.lessons)
         table.splice(0,table.length)
-        //console.log(this.lessons)
+        console.log(this.lessons)
       },
-      
       cargarSelectSala () {
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
         axios.get(config.API_LOCATION + `/skynet/sala/piso1`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
           .then((response) => {
+            //alert(JSON.stringify(response.data));
             this.sala = response.data
           })
           .catch(e => {
           })
       },
       addLesson () {
+        if (!this.id == this.lessons.id) {
+          alert('ASIGNATURA DUPLICADA')
+        }
         const newLesson = {
           'nombre': this.newLessonNombre,
+          'docente': this.newLessonDocente,
           'id': parseInt(this.newLessonIdAsignatura),
           'day': parseInt(this.newLessonDay),
           'timeslot_id': parseInt(this.newLessonTimeslot)
         }
 //        console.log(newLesson)
         this.lessons.push(newLesson)
- 
+        this.guardado.push(newLesson)
+
       },
- 
+
       //aqui termina el add
       content (day, timeslot) { //contenido de toda la cuestion
   //      console.log('Day:')
@@ -275,7 +248,7 @@ import config from '../config.vue' //conexion
 //        console.log(e)
         const lesson = JSON.parse(e.dataTransfer.getData('lesson'))
 //        console.log('Lesson is:', lesson)
-//      
+//       
 //        console.log('Lesson id:', lesson.id)
       //  console.log('Lesson By id:', this.getLessonById(lesson.id))
         // Remove lesson from available asignatura:
@@ -288,6 +261,7 @@ import config from '../config.vue' //conexion
 //        console.log(timeslot)
 //        console.log(timeslot.id)
         this.newLessonNombre = lesson.nombre
+        this.newLessonDocente = lesson.docente.nombre
         this.newLessonDay = day.id
         this.newLessonTimeslot = timeslot.id
         this.newLessonIdAsignatura = lesson.id
@@ -300,7 +274,7 @@ import config from '../config.vue' //conexion
       },
       startDraggingAvailableLesson (e, lesson) {
 //        console.log('Starting drag lesson:')
-//      
+//       
 //        console.log(lesson)
 //        console.log('Event:')
 //        console.log(e)
