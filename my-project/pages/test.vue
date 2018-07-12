@@ -304,6 +304,7 @@ import config from '../config.vue' //conexion
         cargas: [],
         modal: [],
         value: '',
+        salaSelected: -1,
         newLessonNombre: '',
         editedIndex: -1,
         newLessonDay: 0,
@@ -349,9 +350,11 @@ import config from '../config.vue' //conexion
         }
       },
       onChangeSelect (val) {
+        //var idSala = val
         console.log("cambiado los selects: " + val);
-        this.initialize(val)
-        this.cargarModal(val)
+        this.salaSelected = val;
+        this.initialize()
+        this.cargarModal()
       },
       onChangeSelectCarrera (val) {
         this.cargarSelectSeccion(val)
@@ -380,13 +383,13 @@ import config from '../config.vue' //conexion
         })
 
       },
-       initialize (val) { // Función que recarga los datos de la Tabla mediante request a la API REST
-        console.log("Holi "+ val);
+       initialize () { // Función que recarga los datos de la Tabla mediante request a la API REST
+        console.log("Holi ");
         console.log("wena wnea")
         console.log("entraste a las cargas");
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
         this.limpiarTabla()
-        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + val, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + this.salaSelected, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
         .then((response) => {
           this.cargas = response.data
           console.log("esto viene: " + this.cargas.length);
@@ -410,11 +413,11 @@ import config from '../config.vue' //conexion
           console.log(e)
         })
     },
-    cargarModal (val) { // Función que recarga los datos de la Tabla mediante request a la API REST
+    cargarModal () { // Función que recarga los datos de la Tabla mediante request a la API REST
         console.log("entraste a las cargas del modal");
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
         //console.log("estas son las salas: " + sala)
-        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + val, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+        axios.get(config.API_LOCATION + `/skynet/horario/sala/` + this.salaSelected, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
         .then((response) => {
           this.modal = response.data
         })
@@ -450,7 +453,7 @@ import config from '../config.vue' //conexion
                       table.splice(0,table.length)
                       this.snackbar = true 
                       this.text = 'Se ha agregado correctamente'
-                      this.cargarModal(val)
+                      this.cargarModal()
                     }),console.log("listo")
                 }
             }
@@ -463,10 +466,10 @@ import config from '../config.vue' //conexion
         table.splice(0,table.length)
         console.log(this.lessons)
       },
-      borrarDatos (val){
+      borrarDatos (){
         this.dialog2 = false
         const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-        for (var prop in this.lessons) {
+        for (var prop in this.selected) {
                if ( this.selected.hasOwnProperty(prop) ) {
                   //console.log(this.selected[prop]);
                   const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
@@ -476,12 +479,15 @@ import config from '../config.vue' //conexion
                     .then((response) => { 
                     this.snackbar = true 
                     this.text = 'Se ha borrado correctamente'
-                    this.onChangeSelect(val)
+                    this.initialize()
+                    this.cargarModal()
                       })
                       .catch(e => {
+                        console.log("este es el error: " + e)
                         })
-                 
                 }
+                  //console.log("este es el id de la sala: " )
+                 
                 console.log("listeilor")
             }
     

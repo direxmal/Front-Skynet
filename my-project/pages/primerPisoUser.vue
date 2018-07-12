@@ -4,6 +4,22 @@
        <v-layout row wrap>
          <v-flex xs12 sm6>
          <v-select
+             :items="jornada"
+             item-text="nombre"
+             item-value="id"
+             value=""
+             v-model="addItem.jornada"
+             search-input
+             v-on:change="onChangeSelect2"
+             required
+             label="Jornada"
+             autocomplete
+             single-line 
+           ></v-select>
+         </v-flex>
+     
+         <v-flex xs12 sm6>
+         <v-select
              :items="sala"
              item-text="nombre"
              item-value="id"
@@ -99,6 +115,7 @@ import config from '../config.vue' //conexion
         carreraSelectID: {},
         carrerSelectIDEdit: {},
         cargas: [],
+        jornada: [],
         modal: [],
         value: '',
         newLessonNombre: '',
@@ -123,14 +140,17 @@ import config from '../config.vue' //conexion
     created () {
       this.cargarSelectSala()
       this.cargarDias()
-      this.cargarRangos()
-      this.initialize()
+      this.cargarSelectJornada()
     },
 
     methods: {
       onChangeSelect (val) {
         console.log("cambiado los selects: " + val);
         this.initialize(val)
+      },
+      onChangeSelect2 (val) {
+        console.log("cambiado los selects jornada: " + val);
+        this.cargarRangos(val)
       },
       toggleAll () {
         if (this.selected.length) this.selected = []
@@ -154,9 +174,9 @@ import config from '../config.vue' //conexion
         .catch(e => {
         })
       },
-      cargarRangos(){
+      cargarRangos(val){
          const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
-      axios.get(config.API_LOCATION + `/skynet/timeslot/`, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
+      axios.get(config.API_LOCATION + `/skynet/timeslot/jornada/` + val, { headers: { Authorization: AuthStr } }) // petición GET a Seccion para traer todos los objetos jornada
         .then((response) => {
           //console.log(response.data)
           this.timeslots = response.data
@@ -208,6 +228,16 @@ import config from '../config.vue' //conexion
           .then((response) => {
             //alert(JSON.stringify(response.data));
             this.sala = response.data
+          })
+          .catch(e => {
+          })
+      },
+      cargarSelectJornada () {
+        const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
+        axios.get(config.API_LOCATION + `/skynet/jornada/`, { headers: { Authorization: AuthStr } }) // petición GET a Categoria para traer a todos los objetos "categoria"que contengan como tipo "insumo"
+          .then((response) => {
+            //alert(JSON.stringify(response.data));
+            this.jornada = response.data
           })
           .catch(e => {
           })

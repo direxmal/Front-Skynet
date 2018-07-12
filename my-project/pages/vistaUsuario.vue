@@ -3,14 +3,14 @@
       <v-layout row  align-center>
         <v-flex xs12 sm12>
           <div class="text-xs-center">
-            <div>
-              <v-btn color="error" href="/primerPisoUser" dark large>Primer Piso</v-btn>
+            <div xs12 sm12>
+              <v-btn color="error" href="/primerPisoUser" style="height:199px;width:1000px;font-size : 100px" dark round  >Primer Piso</v-btn>
             </div>
             <div>
-              <v-btn color="error" href="/segundoPisoUser" dark large>Segundo Piso</v-btn>
+              <v-btn color="error" href="/segundoPisoUser" style="height:199px;width:1000px;font-size : 100px" dark round >Segundo Piso</v-btn>
             </div>
             <div>
-              <v-btn color="error" href="/tercerPisoUser" dark large>Tercer Piso</v-btn>
+              <v-btn color="error" href="/tercerPisoUser" style="height:199px;width:1000px;font-size : 100px" dark round  >Tercer Piso</v-btn>
             </div>
           </div>
         </v-flex>
@@ -33,3 +33,4 @@ export default {
       }
 }
 </script>
+

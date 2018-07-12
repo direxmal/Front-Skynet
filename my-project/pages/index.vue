@@ -16,16 +16,7 @@ export default {
           src: 'https://image.ibb.co/fbTmEo/IMG_20180628_105037_948.jpg'
         },
         {
-          src: 'https://image.ibb.co/bZqCJJ/3.jpg'
-        },
-        {
-          src: 'https://image.ibb.co/io4uXd/4.jpg'
-        },
-        {
-          src: 'https://image.ibb.co/ha4pyJ/2.jpg'
-        },
-        {
-          src: 'https://image.ibb.co/iAW8sd/5.jpg'
+          src: 'http://img.soy-chile.cl/Fotos/2015/01/08/file_20150108121509.jpg'
         }
       ]
     }

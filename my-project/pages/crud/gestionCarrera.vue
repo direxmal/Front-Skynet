@@ -186,12 +186,6 @@
           </v-btn>
           <span>Editar</span>
           </v-tooltip>
-          <v-tooltip top>
-          <v-btn icon slot="activator" class="mx-0" @click="modalDelete(props.item)" >
-            <v-icon color="red">delete</v-icon>
-          </v-btn>
-          <span>Eliminar</span>
-          </v-tooltip>
         </td>
       </template>
 

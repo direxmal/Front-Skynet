@@ -34,6 +34,7 @@
           ></v-select>
         </v-flex>
 
+
 				<v-flex xs3>
                  <v-subheader>Jornada : </v-subheader>
               </v-flex>
@@ -135,16 +136,15 @@
 				 <v-flex xs9>
 		 		 	<v-select
 					:items="carrera"
-					item-text="nombre"
-					item-value="id"
-					v-model="editedItem.carrera"
-					search-input
-					v-on:change="onChangeSelect"
-					
-					required
-					autocomplete
-					label="Carrera"
-					single-line
+	 				item-text="nombre"
+	 				item-value="id"
+	 				@select='onChangeSelect'
+	 				v-model="editedItem.carrera"
+	 				:error-messages="errorMessages"
+	 				search-input
+	 				autocomplete
+	 				label="Carrera"
+	 				single-line
 		 			></v-select>
 	 			</v-flex>
 				<v-flex xs3>
@@ -153,16 +153,15 @@
 			 <v-flex xs9>
 				<v-select
 				:items="jornada"
-				item-text="nombre"
-				item-value="id"
-				v-model="editedItem.jornada"
-				search-input
-				v-on:change="onChangeSelect2"
-			
-				required
-				autocomplete
-				label="Jornada"
-				single-line
+	 				item-text="nombre"
+	 				item-value="id"
+	 				@select='onChangeSelect'
+	 				v-model="editedItem.jornada"
+	 				:error-messages="errorMessages"
+	 				search-input
+	 				autocomplete
+	 				label="Jornada"
+	 				single-line
 				></v-select>
 			</v-flex>
 			 		</v-layout>
@@ -241,7 +240,9 @@
         <td class="text-xs-center">{{ props.item.id }}</td>
         <td class="text-xs-center">{{ props.item.nombre }}</td>
 				<td class="text-xs-center">{{ props.item.carrera.nombre }}</td>
+			<!--	<td class="text-xs-center" style="display:none;">{{ props.item.id_carrera.id }}</td> -->
 				<td class="text-xs-center">{{ props.item.jornada.nombre }}</td>
+			<!--	<td class="text-xs-center" style="display:none;">{{ props.item.id_jornada.id }}</td> -->
         <td class="justify-center layout px-0">
         <v-tooltip top>
           <v-btn icon slot="activator" class="mx-0" @click="modalDetalle(props.item)" >
@@ -254,12 +255,6 @@
             <v-icon color="green">edit</v-icon>
           </v-btn>
           <span>Editar</span>
-          </v-tooltip>
-          <v-tooltip top>
-          <v-btn icon slot="activator" class="mx-0" @click="modalDelete(props.item)" >
-            <v-icon color="red">delete</v-icon>
-          </v-btn>
-          <span>Eliminar</span>
           </v-tooltip>
         </td>
       </template>
@@ -294,12 +289,13 @@ export default {
 		carrerasSelectID: {},
 		carreraSelectIDEdit: {},
 		jornadaSelectID: {},
+        carreraID: -1,
+        jornadaID: -1,
 		jornadaSelectIDEdit: {},
 		selectValidado: false,
 		selectValidado2: false,
 		carrera: [],
 		jornada: [],
-		value: '',
 		search: '',
 		snackbar: false,
 		color: 'red darken-3',
@@ -321,6 +317,7 @@ export default {
 		],
 		textoRules: validaciones.textoRules,
 		items: [],
+		 value: '',
 		valid: true,
 		addItem: {
 			id: 0,
@@ -372,10 +369,10 @@ export default {
 	},
 	methods: {
 		onChangeSelect (val) {
-			var carreraID = this.editedItem.carrera
+			 this.editedItem.carrera = val.target.value
 		},
 		onChangeSelect2 (val) {
-			var jornadaID = this.editedItem.jornada
+		 	this.editedItem.jornada = val.target.value
 		},
 		onChangeSelectAgregar (val) {
 			this.selectValidado = true
@@ -436,14 +433,15 @@ export default {
 			}
 		},
 		editSeccion () { // función para editar la Subcategoría
+			console.log("entraste al edit wachin :* ")
 			const AuthStr = 'Bearer '.concat(this.$store.state.auth.accessToken)
         var id = this.editedItem.id // obtener id del objeto que se desea editar formulario
         var nombre = this.editedItem.nombre // obtener nombre del objeto que se desea editar formulario
-        console.log(nombre)
-        var idCarrera = this.carreraID
-        console.log(idCarrera)
-		var idJornada = this.jornadaID
-		console.log(idjornada)
+        //console.log(nombre)
+        var idCarrera = this.editedItem.carrera.id
+        console.log("carrera: " + idCarrera)
+		var idJornada = this.editedItem.jornada.id
+		console.log("jornada: " + idJornada)
         if (this.$refs.fEditarSeccion.validate()) {
           axios.put(config.API_LOCATION + '/skynet/seccion/' + id, {// petición put para editar el tipo
             nombre: '' + nombre + '', 

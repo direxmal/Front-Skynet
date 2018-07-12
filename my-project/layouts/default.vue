@@ -50,21 +50,10 @@
          <v-btn slot="activator" href="/" icon dark><v-icon>home</v-icon></v-btn> <!-- Este va al inicio-->
         <span>Inicio</span>
       </v-tooltip>
-      <v-menu offset-y>
-        <v-btn slot="activator" icon dark>
-          <v-icon>more_vert</v-icon>
-        </v-btn>
-        <!-- La lista de la toolbar-->
-        <v-list>
-          <v-list-tile to="/userProfile" >
-            <v-list-tile-title >Perfil</v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile @click="logOut">
-            <v-list-tile-title >Cerrar Sesión</v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-
-    </v-menu>
+      <v-tooltip bottom>
+         <v-btn slot="activator" @click="logOut" icon dark><v-icon>exit_to_app</v-icon></v-btn> <!-- Este va al inicio-->
+        <span>Cerrar Sesión</span>
+      </v-tooltip>
     </v-toolbar>
     <v-content>
     <v-container>
