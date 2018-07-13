@@ -2,7 +2,7 @@
   <v-container grid-list-md text-xs-center>
     <v-container fluid>
        <v-layout row wrap>
-         <v-flex xs12 sm6>
+         <v-flex xs12 sm5>
          <v-select
              :items="jornada"
              item-text="nombre"
@@ -17,7 +17,7 @@
              single-line 
            ></v-select>
          </v-flex>
-         <v-flex xs12 sm6>
+         <v-flex xs12 sm5>
          <v-select
              :items="sala"
              item-text="nombre"
@@ -31,6 +31,51 @@
              autocomplete
              single-line 
            ></v-select>
+         </v-flex>
+         <v-flex xs12 sm2>
+          <div>
+            <v-btn large round color="error" @click.native="dialog = true">Detalle</v-btn>
+          </div>
+          <!-- modal de detalle-->
+            <v-layout row justify-center>
+       <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+        <v-card>         
+          <v-toolbar dark color= red darken-3>
+            <v-btn icon dark large @click.native="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Detalle</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+    <template>
+     <v-data-table
+        :headers="headers"
+        :items="cargas"
+        class="elevation-1"
+      >
+        <template slot="headerCell" slot-scope="props">
+          <v-tooltip bottom>
+            <span slot="activator">
+              {{ props.header.text }}
+            </span>
+            <span>
+            {{ props.header.text }}
+            </span>
+          </v-tooltip>
+        </template>
+        <template slot="items" slot-scope="props">
+          <td class="text-xs-center">{{ props.item.asignatura.nombre }}</td>
+         <td class="text-xs-center">{{ props.item.asignatura.docente.nombre + " " +  props.item.asignatura.docente.apellido }}</td>
+         <td class="text-xs-center">{{ props.item.rangoHora.start }}</td>
+          <td class="text-xs-center">{{ props.item.rangoHora.end  }}</td>
+        </template>
+      </v-data-table>
+    </template>
+          
+        </v-card>
+      </v-dialog>
+      <!-- dialog 2-->
+      </v-layout>
          </v-flex>
       </v-layout>
       <v-flex>
@@ -108,9 +153,21 @@ import config from '../config.vue' //conexion
       timeout: 3000,
       text: 'Se ha agregado con exito',
         carrera: [],
+         headers: [
+        {
+        text: 'Nombre Asignatura',
+        value: 'idAsignatura',
+        sortable: true,
+        width: '25%',
+        align: 'center'
+      },
+
+      { text: 'Docente', value: '', width: '25%', align: 'center' },
+      { text: 'Inicio', value: 'idRangoHora', width: '25%', align: 'center' },
+      { text: 'Termino', value: 'idRangoHora', width: '25%', align: 'center' }
+      ],
         seccion: [],
         dialog: false,
-        dialog2: false,
         carreraSelectID: {},
         carrerSelectIDEdit: {},
         cargas: [],

@@ -241,7 +241,7 @@
         <td class="text-xs-center">{{ props.item.id }}</td>
         <td class="text-xs-center">{{ props.item.nombre }}</td>
         <td class="text-xs-center">{{ props.item.seccion.nombre }}</td>
-        <td class="text-xs-center">{{ props.item.docente.nombre }}</td>
+        <td class="text-xs-center">{{ props.item.docente.nombre + " " + props.item.docente.apellido }}</td>
         <td class="justify-center layout px-0">
         <v-tooltip top>
           <v-btn icon slot="activator" class="mx-0" @click="modalDetalle(props.item)" >

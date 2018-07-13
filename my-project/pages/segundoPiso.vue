@@ -211,7 +211,7 @@
             <v-flex xs12 v-for="lesson in asignatura" :key="lesson.id">
               <v-card draggable="true" @dragstart="startDraggingAvailableLesson($event,lesson)">
               <!--  lesson.nombre + " " + lesson.seccion.nombre + " " + lesson.docente.nombre + " "+ lesson.docente.apellido -->
-                <v-card-text class="px-0">{{lesson.nombre + " " + lesson.docente.nombre}}</v-card-text>
+                <v-card-text class="px-0">{{lesson.nombre}}</v-card-text>
               </v-card>
             </v-flex>
           </v-layout>
