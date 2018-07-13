@@ -17,7 +17,6 @@
              single-line 
            ></v-select>
          </v-flex>
-     
          <v-flex xs12 sm6>
          <v-select
              :items="sala"

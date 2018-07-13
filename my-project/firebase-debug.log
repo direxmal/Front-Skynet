@@ -1,0 +1,176 @@
+[debug] [2018-07-13T00:56:57.777Z] ----------------------------------------------------------------------
+[debug] [2018-07-13T00:56:57.780Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\direx\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase init
+[debug] [2018-07-13T00:56:57.780Z] CLI Version:   3.19.3
+[debug] [2018-07-13T00:56:57.780Z] Platform:      win32
+[debug] [2018-07-13T00:56:57.780Z] Node Version:  v8.11.1
+[debug] [2018-07-13T00:56:57.780Z] Time:          Thu Jul 12 2018 20:56:57 GMT-0400 (Hora est. Sudamérica Pacífico)
+[debug] [2018-07-13T00:56:57.780Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-07-13T00:56:57.787Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] [2018-07-13T00:56:57.788Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\direx\Desktop\Nueva carpeta\my-project
+
+[debug] [2018-07-13T00:57:16.614Z] ----------------------------------------------------------------------
+[debug] [2018-07-13T00:57:16.617Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\direx\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase init Hosting
+[debug] [2018-07-13T00:57:16.617Z] CLI Version:   3.19.3
+[debug] [2018-07-13T00:57:16.617Z] Platform:      win32
+[debug] [2018-07-13T00:57:16.617Z] Node Version:  v8.11.1
+[debug] [2018-07-13T00:57:16.618Z] Time:          Thu Jul 12 2018 20:57:16 GMT-0400 (Hora est. Sudamérica Pacífico)
+[debug] [2018-07-13T00:57:16.618Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-07-13T00:57:16.625Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] [2018-07-13T00:57:16.625Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\direx\Desktop\Nueva carpeta\my-project
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2018-07-13T00:57:21.803Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+  
+ Thu Jul 12 2018 20:57:21 GMT-0400 (Hora est. Sudamérica Pacífico)
+[debug] [2018-07-13T00:57:22.574Z] <<< HTTP RESPONSE 200
+[info] 
+=== Hosting Setup
+[debug] [2018-07-13T00:58:09.917Z] TypeError: features[nextFeature] is not a function
+    at init (C:\Users\direx\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:13:49)
+    at C:\Users\direx\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:14:14
+    at <anonymous>
+    at process._tickDomainCallback (internal/process/next_tick.js:228:7)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2018-07-13T00:58:24.842Z] ----------------------------------------------------------------------
+[debug] [2018-07-13T00:58:24.845Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\direx\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase init Hosting
+[debug] [2018-07-13T00:58:24.845Z] CLI Version:   3.19.3
+[debug] [2018-07-13T00:58:24.845Z] Platform:      win32
+[debug] [2018-07-13T00:58:24.845Z] Node Version:  v8.11.1
+[debug] [2018-07-13T00:58:24.845Z] Time:          Thu Jul 12 2018 20:58:24 GMT-0400 (Hora est. Sudamérica Pacífico)
+[debug] [2018-07-13T00:58:24.845Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-07-13T00:58:24.853Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] [2018-07-13T00:58:24.853Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\direx\Desktop\Nueva carpeta\my-project
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2018-07-13T00:58:26.241Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+  
+ Thu Jul 12 2018 20:58:26 GMT-0400 (Hora est. Sudamérica Pacífico)
+[debug] [2018-07-13T00:58:27.028Z] <<< HTTP RESPONSE 200
+[debug] [2018-07-13T00:59:19.526Z] ----------------------------------------------------------------------
+[debug] [2018-07-13T00:59:19.529Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\direx\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase init Hosting
+[debug] [2018-07-13T00:59:19.530Z] CLI Version:   3.19.3
+[debug] [2018-07-13T00:59:19.530Z] Platform:      win32
+[debug] [2018-07-13T00:59:19.530Z] Node Version:  v8.11.1
+[debug] [2018-07-13T00:59:19.530Z] Time:          Thu Jul 12 2018 20:59:19 GMT-0400 (Hora est. Sudamérica Pacífico)
+[debug] [2018-07-13T00:59:19.530Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-07-13T00:59:19.538Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] [2018-07-13T00:59:19.538Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\direx\Desktop\Nueva carpeta\my-project
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2018-07-13T00:59:25.530Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+  
+ Thu Jul 12 2018 20:59:25 GMT-0400 (Hora est. Sudamérica Pacífico)
+[debug] [2018-07-13T00:59:26.309Z] <<< HTTP RESPONSE 200
+[info] 
+=== Hosting Setup
+[debug] [2018-07-13T00:59:27.933Z] TypeError: features[nextFeature] is not a function
+    at init (C:\Users\direx\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:13:49)
+    at C:\Users\direx\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:14:14
+    at <anonymous>
+    at process._tickDomainCallback (internal/process/next_tick.js:228:7)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2018-07-13T00:59:35.722Z] ----------------------------------------------------------------------
+[debug] [2018-07-13T00:59:35.724Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\direx\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase init Hosting
+[debug] [2018-07-13T00:59:35.724Z] CLI Version:   3.19.3
+[debug] [2018-07-13T00:59:35.724Z] Platform:      win32
+[debug] [2018-07-13T00:59:35.725Z] Node Version:  v8.11.1
+[debug] [2018-07-13T00:59:35.725Z] Time:          Thu Jul 12 2018 20:59:35 GMT-0400 (Hora est. Sudamérica Pacífico)
+[debug] [2018-07-13T00:59:35.725Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-07-13T00:59:35.733Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] [2018-07-13T00:59:35.733Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\direx\Desktop\Nueva carpeta\my-project
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2018-07-13T00:59:37.715Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+  
+ Thu Jul 12 2018 20:59:37 GMT-0400 (Hora est. Sudamérica Pacífico)
+[debug] [2018-07-13T00:59:38.481Z] <<< HTTP RESPONSE 200
+[info] 
+=== Hosting Setup
+[debug] [2018-07-13T00:59:40.488Z] TypeError: features[nextFeature] is not a function
+    at init (C:\Users\direx\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:13:49)
+    at C:\Users\direx\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:14:14
+    at <anonymous>
+    at process._tickDomainCallback (internal/process/next_tick.js:228:7)
+[error] 
+[error] Error: An unexpected error has occurred.

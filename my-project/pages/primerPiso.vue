@@ -31,7 +31,6 @@
          </v-flex>
         <v-flex>
           <!-- el primer boton-->
-            <span>Guardar</span>
             <v-tooltip bottom>
                 <v-btn slot="activator" type="submit" outline large fab color="primary" @click.native="agregarHorario" ref="fAgregarHorario" >
                   <v-icon>add</v-icon>

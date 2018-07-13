@@ -88,9 +88,11 @@ import Cookie from 'js-cookie'
         var user = document.getElementById('user').value
         var password = document.getElementById('password').value
       //  console.log(user + '**** ' + password)
+      if (user === 'admin' && password === 'admin') {
+
         axios.post(config.API_LOCATION + `/auth`,
          { username: user,
-	          password: password }) // petición GET a Tipo para traer a todos los objetos "tipo"
+            password: password }) // petición GET a Tipo para traer a todos los objetos "tipo"
           .then((response) => {
             console.log("tomado")
             console.log(response)
@@ -118,6 +120,12 @@ import Cookie from 'js-cookie'
                 })
               */
           })
+         
+        } else {
+          alert('Clave o Usuario Incorrecto')
+        }
+
+        
 
         /*
         if (user === 'admin' && password === 'admin') {

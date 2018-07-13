@@ -4,13 +4,13 @@
         <v-flex xs12 sm12>
           <div class="text-xs-center">
             <div xs12 sm12>
-              <v-btn color="error" href="/primerPisoUser" style="height:199px;width:1000px;font-size : 100px" dark round  >Primer Piso</v-btn>
+              <v-btn color="error" href="/primerPisoUser" style="height:150px;width:800px;font-size : 70px" dark round  >Primer Piso</v-btn>
             </div>
             <div>
-              <v-btn color="error" href="/segundoPisoUser" style="height:199px;width:1000px;font-size : 100px" dark round >Segundo Piso</v-btn>
+              <v-btn color="error" href="/segundoPisoUser" style="height:150px;width:800px;font-size : 70px" dark round >Segundo Piso</v-btn>
             </div>
             <div>
-              <v-btn color="error" href="/tercerPisoUser" style="height:199px;width:1000px;font-size : 100px" dark round  >Tercer Piso</v-btn>
+              <v-btn color="error" href="/tercerPisoUser" style="height:150px;width:800px;font-size : 70px" dark round  >Tercer Piso</v-btn>
             </div>
           </div>
         </v-flex>
